@@ -1,0 +1,5 @@
+- hosts: deb_vm
+  become: true
+  roles:
+    - security
+

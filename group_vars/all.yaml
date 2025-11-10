@@ -1,0 +1,4 @@
+new_ssh_port: 2222
+
+# This will be used for testing, for now
+setup_user: setup
