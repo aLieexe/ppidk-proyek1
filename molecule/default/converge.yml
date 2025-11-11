@@ -3,6 +3,6 @@
   hosts: setup
   gather_facts: true
   vars_files: 
-  - ../../../group_vars/all.yaml
+  - ../../group_vars/all.yaml
   roles: 
-    - role: ../../../security
+    - role: "{{ playbook_dir }}/../../security"

@@ -1,0 +1,22 @@
+- name: Setup for debian based server
+  include_tasks: Debian-setup.yaml
+  when: ansible_facts.os_family == 'Debian'
+
+- name: Run lynis 
+  ansible.builtin.command: lynis audit system --nocolors
+  register: lynis
+  tags:
+  - molecule-idempotence-notest
+
+- name: Ensure result directory exists on localhost
+  ansible.builtin.file:
+    path: "{{ playbook_dir }}/result"
+    state: directory
+  delegate_to: localhost
+
+- name: Save lynis result to a file
+  ansible.builtin.copy:
+    # Get rid of ANSI Escape sequence and any other tomfoolery
+    content: "{{ lynis.stdout | regex_replace('\x1B\\[[0-9;]*[A-Za-z]', '') }}"
+    dest: "{{ playbook_dir }}/result/lynis.audit"
+  delegate_to: localhost
