@@ -26,3 +26,7 @@
 # SELinux https://wiki.debian.org/SELinux/Setup, https://major.io/p/getting-started-with-selinux/, https://cycle.io/learn/selinux-basics
 - name: Setup SELinux
   include_tasks: selinux.yaml
+
+# systemd hardening
+- name: systemd hardening
+  include_tasks:  systemd-hardening.yaml

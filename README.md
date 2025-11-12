@@ -7,6 +7,8 @@ Support other linux distro
 - Open Suse
 - AlmaLinux
 
+?? IDK tho kekw
+
 Integrate molecule on the CI?
 
 # Audit

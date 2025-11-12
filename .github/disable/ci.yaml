@@ -1,0 +1,45 @@
+name: CI
+on:
+  # push:
+  #   branches: 
+  #     - main
+  #     - fix/*
+  #     - feat/*
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+    molecule-test: 
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          distro:
+            - ubuntu2404
+            - ubuntu2204
+            - debian13
+            - debian12
+
+      steps: 
+        - uses: actions/checkout@v5
+
+        - name: Set up Python 3.
+          uses: actions/setup-python@v5
+          with:
+            python-version: '3.12'
+
+        - name: Install test dependencies.
+          run: pip3 install ansible molecule molecule-plugins[docker] docker
+
+        - name: Debug
+          working-directory: ./deploy/ansible
+          run: pwd
+
+        - name: Run Molecule tests.
+          run: molecule test
+          working-directory: ./deploy/ansible
+          env:
+            PY_COLORS: '1'
+            ANSIBLE_FORCE_COLOR: '1'
+            MOLECULE_DISTRO: ${{ matrix.distro }}

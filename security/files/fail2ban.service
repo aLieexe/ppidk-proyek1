@@ -1,0 +1,5 @@
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+NoNewPrivileges=yes
+MemoryDenyWriteExecute=yes

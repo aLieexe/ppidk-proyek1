@@ -16,3 +16,7 @@ package_needed:
   - apt-listchanges
   - needrestart 
   - libpam-tmpdir
+
+systemd_hardening: 
+  - ssh.service
+  - fail2ban.service

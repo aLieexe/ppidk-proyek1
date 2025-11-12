@@ -123,7 +123,7 @@ Found 116 active modules
 - 'hard' configuration in /etc/security/limits.conf [ DEFAULT ]
 - 'soft' configuration in /etc/security/limits.conf [ DEFAULT ]
 - Checking setuid core dumps configuration [ DISABLED ]
-- Check if reboot is needed [ YES ]
+- Check if reboot is needed [ NO ]
 
 [+] Memory and Processes
 ------------------------------------
@@ -223,10 +223,10 @@ Result: found 8 shells (valid shells: 8).
 - Searching package managers
 - Searching dpkg package manager [ FOUND ]
 - Querying package manager
-- Query unpurged packages [ FOUND ]
+- Query unpurged packages [ NONE ]
 - Checking security repository in sources.list file [ OK ]
 - Checking APT package database [ OK ]
-- Checking vulnerable packages (apt-get only) [ DONE ]
+- Checking vulnerable packages [ WARNING ]
 - Checking upgradeable packages [ SKIPPED ]
 - Checking package audit tool [ INSTALLED ]
 Found: apt-get
@@ -369,7 +369,7 @@ No database engines found
 ------------------------------------
 - NTP daemon found: systemd (timesyncd) [ FOUND ]
 - Checking for a running NTP daemon or client [ OK ]
-- Last time synchronization [ 1859s ]
+- Last time synchronization [ 61s ]
 
 [+] Cryptography
 ------------------------------------
@@ -394,7 +394,7 @@ No database engines found
 - Checking current mode and config file [ OK ]
 Current SELinux mode: permissive
 Found 0 permissive SELinux object types
-Found 12 unconfined and 1 initrc_t processes
+Found 10 unconfined and 1 initrc_t processes
 - Checking presence TOMOYO Linux [ NOT FOUND ]
 - Checking presence grsecurity [ NOT FOUND ]
 - Checking for implemented MAC framework [ OK ]
@@ -504,9 +504,8 @@ Directory: /etc/cron.monthly [ SUGGESTION ]
 
   Warnings (2):
   ----------------------------
-  ! Reboot of system is most likely needed [KRNL-5830] 
-    - Solution : reboot
-      https://cisofy.com/lynis/controls/KRNL-5830/
+  ! Found one or more vulnerable packages. [PKGS-7392] 
+      https://cisofy.com/lynis/controls/PKGS-7392/
 
   ! Couldn't find 2 responsive nameservers [NETW-2705] 
       https://cisofy.com/lynis/controls/NETW-2705/
@@ -562,11 +561,11 @@ Directory: /etc/cron.monthly [ SUGGESTION ]
   * Check DNS configuration for the dns domain name [NAME-4028] 
       https://cisofy.com/lynis/controls/NAME-4028/
 
-  * Purge old/removed packages (2 found) with aptitude purge or dpkg --purge command. This will cleanup old configuration files, cron jobs and startup scripts. [PKGS-7346] 
-      https://cisofy.com/lynis/controls/PKGS-7346/
-
   * Install debsums utility for the verification of packages with known good database. [PKGS-7370] 
       https://cisofy.com/lynis/controls/PKGS-7370/
+
+  * Update your system with apt-get update, apt-get upgrade, apt-get dist-upgrade and/or unattended-upgrades [PKGS-7392] 
+      https://cisofy.com/lynis/controls/PKGS-7392/
 
   * Install package apt-show-versions for patch management purposes [PKGS-7394] 
       https://cisofy.com/lynis/controls/PKGS-7394/
@@ -664,7 +663,7 @@ Directory: /etc/cron.monthly [ SUGGESTION ]
 
   Lynis security scan details:
 
-  Hardening index : 70 [##############      ]
+  Hardening index : 72 [##############      ]
   Tests performed : 254
   Plugins enabled : 1
 

@@ -27,7 +27,14 @@
   register: check_result
   ignore_errors: true
 
-- name: Unattended-upgrades failure details
-  ansible.builtin.debug:
-    var: ansible_facts.services['unattended-upgrades.service']
+- name: Show unattended-upgrades logs
+  ansible.builtin.command: journalctl -u unattended-upgrades.service --no-pager -n 50
+  register: unattended_logs
+  changed_when: false
   when: check_result is failed
+
+- name: Display unattended-upgrades logs
+  ansible.builtin.debug:
+    var: unattended_logs.stdout_lines
+  when: check_result is failed
+

@@ -1,0 +1,39 @@
+# First of all, i aint hardening what is not needed to be harden, some like lynis need to be let go, because they are audit tools. The main one is gonna be the public facing one, for now SSH and fail2ban 
+# This thing is meant to be used more for services like apache, caddy, mailserver etc
+# Im just playing it safe, feel free to add more. 
+# https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# https://news.ycombinator.com/item?id=44928504
+# https://github.com/desbma/shh
+# https://documentation.suse.com/smart/security/html/systemd-securing/index.html
+# https://roguesecurity.dev/blog/systemd-hardening
+# https://github.com/alegrey91/systemd-service-hardening
+
+- name: Create <service>.service.d directory
+  ansible.builtin.file:
+    path: /etc/systemd/system/{{ item }}.d/
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+  loop: "{{ systemd_hardening }}"
+
+- name: Copy <service>.service config
+  ansible.builtin.copy:
+    src: "{{ item }}" 
+    dest: /etc/systemd/system/{{ item }}.d/override.conf
+    owner: root
+    group: root
+    mode: 644
+  loop: "{{ systemd_hardening }}"
+
+- name: Force systemd to reread configs (Ansible 2.4 and above)
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+
+- name: Restart services
+  ansible.builtin.systemd_service:
+    name: "{{ item }}"
+    state: restarted
+  tags:
+  - molecule-idempotence-notest
+  loop: "{{ systemd_hardening }}"
