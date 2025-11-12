@@ -1,15 +1,10 @@
 # TODO
 Do as much green for the audit below at least
 
-Support other linux distro
-- Debian / Ubuntu 
-- Rocky Linux
-- Open Suse
-- AlmaLinux
+Support other linux distro ??
 
-?? IDK tho kekw
+Vagrant? 
 
-Integrate molecule on the CI?
 
 # Audit
 Also need to integrate this into the test or install automatically somehow, idk. Can add more if want
