@@ -67,7 +67,7 @@ Note: plugins have more extensive tests and may take several minutes to complete
 - apt-listbugs [ Installed and enabled for apt ]
 - apt-listchanges [ Installed and enabled for apt ]
 - needrestart [ Installed ]
-- fail2ban [ Installed with jail.conf ]
+- fail2ban [ Installed with jail.local ]
 ]
 
 [+] Boot and services
@@ -77,7 +77,7 @@ Note: plugins have more extensive tests and may take several minutes to complete
 - Checking presence GRUB2 [ FOUND ]
 - Checking for password protection [ NONE ]
 - Check running services (systemctl) [ DONE ]
-Result: found 11 running services
+Result: found 12 running services
 - Check enabled services at boot (systemctl) [ DONE ]
 Result: found 14 enabled services
 - Check startup files (permissions) [ OK ]
@@ -369,7 +369,7 @@ No database engines found
 ------------------------------------
 - NTP daemon found: systemd (timesyncd) [ FOUND ]
 - Checking for a running NTP daemon or client [ OK ]
-- Last time synchronization [ 10s ]
+- Last time synchronization [ 1859s ]
 
 [+] Cryptography
 ------------------------------------
@@ -394,7 +394,7 @@ No database engines found
 - Checking current mode and config file [ OK ]
 Current SELinux mode: permissive
 Found 0 permissive SELinux object types
-Found 10 unconfined and 1 initrc_t processes
+Found 12 unconfined and 1 initrc_t processes
 - Checking presence TOMOYO Linux [ NOT FOUND ]
 - Checking presence grsecurity [ NOT FOUND ]
 - Checking for implemented MAC framework [ OK ]
@@ -511,13 +511,10 @@ Directory: /etc/cron.monthly [ SUGGESTION ]
   ! Couldn't find 2 responsive nameservers [NETW-2705] 
       https://cisofy.com/lynis/controls/NETW-2705/
 
-  Suggestions (44):
+  Suggestions (43):
   ----------------------------
   * This release is more than 4 months old. Check the website or GitHub to see if there is an update available. [LYNIS] 
       https://cisofy.com/lynis/controls/LYNIS/
-
-  * Copy /etc/fail2ban/jail.conf to jail.local to prevent it being changed by updates. [DEB-0880] 
-      https://cisofy.com/lynis/controls/DEB-0880/
 
   * Set a password on GRUB boot loader to prevent altering boot configuration (e.g. boot in single user mode without password) [BOOT-5122] 
       https://cisofy.com/lynis/controls/BOOT-5122/

@@ -8,145 +8,21 @@
   when: ansible_user != "root"
 
 # SSH
-- name: Ensure /etc/ssh exists
-  ansible.builtin.file:
-    path: /etc/ssh
-    state: directory
-    owner: root
-    group: root
-    mode: '0755'
-
-- name: Ensure backup directory exists
-  ansible.builtin.file:
-    path: /etc/ssh/bak
-    state: directory
-    mode: '0755'
-
-- name: Backup sshd_config before editing
-  ansible.builtin.copy:
-    src: /etc/ssh/sshd_config
-    dest: /etc/ssh/sshd_config.bak
-    remote_src: yes
-  tags:
-  - molecule-idempotence-notest
-
-- name: Deploy sshd_config
-  ansible.builtin.template:
-    src: "sshd_config.j2"
-    dest: "/etc/ssh/sshd_config"
-
-- name: Force systemd to reread configs (2.4 and above)
-  ansible.builtin.systemd_service:
-    daemon_reload: true
-
-- name: Restart ssh service
-  ansible.builtin.systemd_service:
-    name: ssh.service
-    state: restarted
-  tags:
-  - molecule-idempotence-notest
-
-- name: Gather service facts
-  ansible.builtin.service_facts:
-  tags:
-  - molecule-idempotence-notest
-
-- name: Ensure SSH service is running
-  ansible.builtin.assert:
-    that:
-    - "'ssh.service' in ansible_facts.services"
-    - ansible_facts.services['ssh.service'].state == 'running'
-    fail_msg: "SSH service is not running or missing. Showing details below:"
-    success_msg: "SSH service is active and running."
-  register: ssh_check_result
-  ignore_errors: true
-  tags:
-  - molecule-idempotence-notest
-
-- name: Print SSH service details if check failed
-  ansible.builtin.debug:
-    var: ansible_facts.services['ssh.service']
-  when: ssh_check_result is failed
-  tags:
-  - molecule-idempotence-notest
+- name: Setup SSH
+  include_tasks: ssh-setup.yaml
 
 # Automated Updates
-- name: Copy unattended-upgrades configuration files in place.
-  ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: "/etc/apt/apt.conf.d/{{ item }}"
-    owner: root
-    group: root
-    mode: 644
-  with_items:
-  - 20auto-upgrades
-  - 50unattended-upgrades
+- name: Setup unattended-upgrades
+  include_tasks: unattended-upgrades.yaml
 
 # UFW
-- name: Configure open ports with UFW
-  community.general.ufw:
-    rule: "{{ item.rule }}"
-    port: "{{ item.port }}"
-    proto: "{{ item.proto }}"
-  loop:
-  - { rule: 'allow', port: "{{ new_ssh_port }}", proto: 'tcp' } # SSH
-  - { rule: 'allow', port: 80, proto: 'tcp' } # HTTP
-  - { rule: 'allow', port: 443, proto: 'tcp' } # HTTPS
-  - { rule: 'allow', port: 123, proto: 'udp' } # NTP
-  - { rule: 'deny', port: 22, proto: 'tcp' } # Old SSH Port
-  tags:
-  - molecule-idempotence-notest
-
-- name: Configure default incoming/outgoing rules with UFW
-  community.general.ufw:
-    direction: "{{ item.direction }}"
-    policy: "{{ item.policy }}"
-    state: enabled
-  loop:
-  - { direction: outgoing, policy: allow }
-  - { direction: incoming, policy: deny }
-
-- name: Update ansible_port for this host
-  ansible.builtin.set_fact:
-    ansible_port: "{{ new_ssh_port }}"
-
-- name: Reconnect to host with new port
-  ansible.builtin.meta: reset_connection
+- name: Setup UFW
+  include_tasks: ufw.yaml
 
 # Fail2ban
-# TODO: Add config http://www.fail2ban.org/wiki/index.php/MANUAL_0_8
-- name: Ensure fail2ban is running and enabled on boot.
-  ansible.builtin.service:
-    name: fail2ban
-    state: started
-    enabled: yes
-  tags:
-  - molecule-idempotence-notest
+- name: Setup fail2ban
+  include_tasks: fail2ban.yaml
 
 # SELinux https://wiki.debian.org/SELinux/Setup, https://major.io/p/getting-started-with-selinux/, https://cycle.io/learn/selinux-basics
-- name: Run selinux-activate (Debian-family)
-  ansible.builtin.command: selinux-activate
-  tags:
-  - molecule-idempotence-notest
-
-# Why not put it in enforcing you ask? Im too lazy to learn other usecase and what may be blocked therefore turn on on your own risk  :D
-- name: Put SELinux in permissive mode, logging actions that would be blocked.
-  ansible.posix.selinux:
-    policy: default
-    state: permissive
-  register: selinux_config
-
-# This require some reading comprehension, please refer to https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/part_ii-managing_confined_services
-- name: Ensure httpd can connect to the network.
-  ansible.posix.seboolean:
-    name: httpd_can_network_connect
-    state: yes
-    persistent: yes
-  when: ansible_selinux.status == 'enabled'
-
-# Cant make it work with molecule idk
-- name: Reboot to apply SELinux configuration
-  ansible.builtin.reboot:
-  tags:
-  - molecule-notest
-  when: selinux_config.reboot_required
+- name: Setup SELinux
+  include_tasks: selinux.yaml
