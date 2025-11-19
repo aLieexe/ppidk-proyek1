@@ -12,7 +12,7 @@ package_needed:
   - policycoreutils
   - auditd
   - curl
-  - apt-listbugs
+  # - apt-listbugs
   - apt-listchanges
   - needrestart 
   - libpam-tmpdir
