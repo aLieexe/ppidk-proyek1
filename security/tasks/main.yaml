@@ -14,7 +14,7 @@
 # Automated Updates
 - name: Setup unattended-upgrades
   include_tasks: unattended-upgrades.yaml
-  when: not molecule_testing
+  when: not "{{ molecule_testing | default(false) }}"
 
 # UFW
 - name: Setup UFW

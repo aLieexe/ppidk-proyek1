@@ -1,5 +1,6 @@
 - hosts: deb_vm
   become: true
   roles:
+    - debug
     - security
     - audit

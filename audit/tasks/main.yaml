@@ -13,6 +13,7 @@
     path: "{{ playbook_dir }}/result"
     state: directory
   delegate_to: localhost
+  become: false
 
 - name: Save lynis result to a file
   ansible.builtin.copy:
@@ -20,3 +21,4 @@
     content: "{{ lynis.stdout | regex_replace('\x1B\\[[0-9;]*[A-Za-z]', '') }}"
     dest: "{{ playbook_dir }}/result/lynis.audit"
   delegate_to: localhost
+  become: false
