@@ -3,12 +3,7 @@
     rule: "{{ item.rule }}"
     port: "{{ item.port }}"
     proto: "{{ item.proto }}"
-  loop:
-  - { rule: 'allow', port: "{{ new_ssh_port }}", proto: 'tcp' } # SSH
-  - { rule: 'allow', port: 80, proto: 'tcp' } # HTTP
-  - { rule: 'allow', port: 443, proto: 'tcp' } # HTTPS
-  - { rule: 'allow', port: 123, proto: 'udp' } # NTP
-  - { rule: 'deny', port: 22, proto: 'tcp' } # Old SSH Port
+  loop: "{{ ufw_allowed_ports }}"
   tags:
   - molecule-idempotence-notest
 
@@ -23,8 +18,7 @@
 
 - name: Update ansible_port for this host
   ansible.builtin.set_fact:
-    ansible_port: "{{ new_ssh_port }}"
+    ansible_port: "{{ ssh_new_port }}"
 
 - name: Reconnect to host with new port
   ansible.builtin.meta: reset_connection
-

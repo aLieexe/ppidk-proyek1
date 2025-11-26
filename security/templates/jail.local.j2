@@ -5,28 +5,28 @@
 banaction = ufw
 
 # 30m = 30 minutes, 1h = 1 hour, 1d = 1 day
-bantime  = 30m
+bantime  = {{ fail2ban_bantime }}
 
-findtime = 10m
-maxretry = 5
+findtime = {{ fail2ban_findtime }}
+maxretry = {{ fail2ban_maxretry }}
 
 # This ensures bans are restored after a reboot.
 dbfile = /config/fail2ban/fail2ban.sqlite3
 
 [ssh]
 enabled = true
-port    = {{ new_ssh_port }} 
+port    = {{ ssh_new_port }} 
 filter  = sshd
 backend = systemd
 # logpath = /var/log/auth.log
-maxretry = 3
-bantime = 600
+maxretry = {{ fail2ban_ssh_maxretry }}
+bantime = {{ fail2ban_ssh_bantime }}
 
 [sshd]
 enabled = true
-port    = {{ new_ssh_port }} 
+port    = {{ ssh_new_port }} 
 filter  = sshd
 backend = systemd
 # logpath = /var/log/auth.log
-maxretry = 3
-bantime = 600
+maxretry = {{ fail2ban_ssh_maxretry }}
+bantime = {{ fail2ban_ssh_bantime }}

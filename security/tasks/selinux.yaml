@@ -3,25 +3,22 @@
   tags:
   - molecule-idempotence-notest
 
-# Why not put it in enforcing you ask? Im too lazy to learn other usecase and what may be blocked therefore turn on on your own risk  :D
-- name: Put SELinux in permissive mode, logging actions that would be blocked.
+- name: Put SELinux in {{ selinux_state }} mode
   ansible.posix.selinux:
-    policy: default
-    state: permissive
+    policy: "{{ selinux_policy }}"
+    state: "{{ selinux_state }}"
   register: selinux_config
 
 # This require some reading comprehension, please refer to https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/part_ii-managing_confined_services
 - name: Ensure httpd can connect to the network.
   ansible.posix.seboolean:
     name: httpd_can_network_connect
-    state: yes
+    state: "{{ selinux_httpd_can_network_connect | ternary('yes', 'no') }}"
     persistent: yes
   when: ansible_selinux.status == 'enabled'
 
-# Cant make it work with molecule idk
 - name: Reboot to apply SELinux configuration
   ansible.builtin.reboot:
   tags:
   - molecule-notest
   when: selinux_config.reboot_required
-

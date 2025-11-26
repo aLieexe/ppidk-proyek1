@@ -1,10 +1,8 @@
-# Minimum length of 10 characters
-minlen = 10
+minlen = {{ pwquality_minlen }}
 
-dcredit = -1   # Must have at least 1 digit (0-9)
-ucredit = -1   # Must have at least 1 Uppercase (A-Z)
-lcredit = -1   # Must have at least 1 Lowercase (a-z)
-ocredit = -1   # Must have at least 1 Symbol (!@#$)
+dcredit = {{ pwquality_dcredit }}  
+ucredit = {{ pwquality_ucredit }}   
+lcredit = {{ pwquality_lcredit }}  
+ocredit = {{ pwquality_ocredit }}   
 
-# Deny passwords that contain the username
-usercheck = 1
+usercheck = {{ pwquality_usercheck }}
