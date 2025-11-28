@@ -1,5 +1,5 @@
 
-[ Lynis 3.0.9 ]
+[ Lynis 3.0.8 ]
 
 ################################################################################
   Lynis comes with ABSOLUTELY NO WARRANTY. This is free software, and you are
@@ -17,13 +17,13 @@
 - Checking profiles... [ DONE ]
 
   ---------------------------------------------------
-  Program version:           3.0.9
+  Program version:           3.0.8
   Operating system:          Linux
-  Operating system name:     Ubuntu
-  Operating system version:  24.04
-  Kernel version:            6.8.0
+  Operating system name:     Debian
+  Operating system version:  12
+  Kernel version:            6.1.0
   Hardware platform:         x86_64
-  Hostname:                  ubuntu
+  Hostname:                  deb-vm
   ---------------------------------------------------
   Profiles:                  /etc/lynis/default.prf
   Log file:                  /var/log/lynis.log
@@ -60,15 +60,9 @@ Note: plugins have more extensive tests and may take several minutes to complete
 - Checking /usr/local/sbin...  [ FOUND ]
 - Authentication:
 - PAM (Pluggable Authentication Modules):
-
-  [WARNING]: Test DEB-0001 had a long execution: 11.748703 seconds
-
 - libpam-tmpdir [ Installed and Enabled ]
 - File System Checks:
 - DM-Crypt, Cryptsetup & Cryptmount:
-- Checking / on /dev/vda1 [ NOT ENCRYPTED ]
-- Checking /boot on /dev/vda16 [ NOT ENCRYPTED ]
-- Checking /boot/efi on /dev/vda15 [ NOT ENCRYPTED ]
 - Software:
 - apt-listbugs [ Not Installed ]
 - apt-listchanges [ Installed and enabled for apt ]
@@ -83,54 +77,35 @@ Note: plugins have more extensive tests and may take several minutes to complete
 - Checking presence GRUB2 [ FOUND ]
 - Checking for password protection [ NONE ]
 - Check running services (systemctl) [ DONE ]
-Result: found 20 running services
+Result: found 14 running services
 - Check enabled services at boot (systemctl) [ DONE ]
-Result: found 47 enabled services
+Result: found 14 enabled services
 - Check startup files (permissions) [ OK ]
 - Running 'systemd-analyze security'
-- ModemManager.service: [ MEDIUM ]
 - auditd.service: [ EXPOSED ]
 - cron.service: [ UNSAFE ]
 - dbus.service: [ UNSAFE ]
-- dm-event.service: [ UNSAFE ]
-- dmesg.service: [ UNSAFE ]
 - emergency.service: [ UNSAFE ]
 - fail2ban.service: [ UNSAFE ]
 - getty@tty1.service: [ UNSAFE ]
-- iscsid.service: [ UNSAFE ]
-- lvm2-lvmpolld.service: [ UNSAFE ]
+- ifup@enp1s0.service: [ UNSAFE ]
 - lynis.service: [ UNSAFE ]
-- multipathd.service: [ UNSAFE ]
-- networkd-dispatcher.service: [ UNSAFE ]
-- open-vm-tools.service: [ UNSAFE ]
-- packagekit.service: [ UNSAFE ]
-- plymouth-start.service: [ UNSAFE ]
-- polkit.service: [ PROTECTED ]
+- qemu-guest-agent.service: [ UNSAFE ]
 - rc-local.service: [ UNSAFE ]
 - rescue.service: [ UNSAFE ]
-- rsyslog.service: [ MEDIUM ]
-- serial-getty@ttyS0.service: [ UNSAFE ]
-- snapd.service: [ UNSAFE ]
 - ssh.service: [ UNSAFE ]
 - systemd-ask-password-console.service: [ UNSAFE ]
-- systemd-ask-password-plymouth.service: [ UNSAFE ]
 - systemd-ask-password-wall.service: [ UNSAFE ]
-- systemd-bsod.service: [ UNSAFE ]
 - systemd-fsckd.service: [ UNSAFE ]
 - systemd-initctl.service: [ UNSAFE ]
 - systemd-journald.service: [ PROTECTED ]
 - systemd-logind.service: [ PROTECTED ]
 - systemd-networkd.service: [ PROTECTED ]
-- systemd-resolved.service: [ PROTECTED ]
-- systemd-rfkill.service: [ UNSAFE ]
 - systemd-timesyncd.service: [ PROTECTED ]
 - systemd-udevd.service: [ MEDIUM ]
-- tpm-udev.service: [ UNSAFE ]
-- ubuntu-advantage.service: [ UNSAFE ]
-- udisks2.service: [ UNSAFE ]
 - unattended-upgrades.service: [ UNSAFE ]
-- uuidd.service: [ MEDIUM ]
-- vgauth.service: [ UNSAFE ]
+- user@1000.service: [ UNSAFE ]
+- user@1001.service: [ UNSAFE ]
 
 [+] Kernel
 ------------------------------------
@@ -140,7 +115,7 @@ CPU support: PAE and/or NoeXecute supported [ FOUND ]
 - Checking kernel version and release [ DONE ]
 - Checking kernel type [ DONE ]
 - Checking loaded kernel modules [ DONE ]
-Found 62 active modules
+Found 113 active modules
 - Checking Linux kernel configuration file [ FOUND ]
 - Checking default I/O kernel scheduler [ NOT FOUND ]
 - Checking for available kernel update [ OK ]
@@ -149,7 +124,7 @@ Found 62 active modules
 - configuration in /etc/profile [ DEFAULT ]
 - 'hard' configuration in /etc/security/limits.conf [ DEFAULT ]
 - 'soft' configuration in /etc/security/limits.conf [ DEFAULT ]
-- Checking setuid core dumps configuration [ PROTECTED ]
+- Checking setuid core dumps configuration [ DISABLED ]
 - Check if reboot is needed [ NO ]
 
 [+] Memory and Processes
@@ -175,7 +150,6 @@ Found 62 active modules
 - Sudoers file(s) [ FOUND ]
 - Permissions for directory: /etc/sudoers.d [ OK ]
 - Permissions for: /etc/sudoers [ OK ]
-- Permissions for: /etc/sudoers.d/90-cloud-init-users [ OK ]
 - Permissions for: /etc/sudoers.d/README [ OK ]
 - PAM password strength tools [ OK ]
 - PAM configuration files (pam.conf) [ FOUND ]
@@ -198,7 +172,7 @@ Found 62 active modules
 [+] Shells
 ------------------------------------
 - Checking shells from /etc/shells
-Result: found 9 shells (valid shells: 9).
+Result: found 8 shells (valid shells: 8).
 - Session timeout settings/tools [ NONE ]
 - Checking default umask values
 - Checking default umask in /etc/bash.bashrc [ NONE ]
@@ -210,19 +184,17 @@ Result: found 9 shells (valid shells: 9).
 - Checking /home mount point [ SUGGESTION ]
 - Checking /tmp mount point [ SUGGESTION ]
 - Checking /var mount point [ SUGGESTION ]
-- Query swap partitions (fstab) [ NONE ]
+- Query swap partitions (fstab) [ OK ]
 - Testing swap partitions [ OK ]
-- Testing /proc mount (hidepid) [ SUGGESTION ]
 - Checking for old files in /tmp [ OK ]
 - Checking /tmp sticky bit [ OK ]
 - Checking /var/tmp sticky bit [ OK ]
 - ACL support root file system [ ENABLED ]
 - Mount options of / [ NON DEFAULT ]
-- Mount options of /boot [ DEFAULT ]
 - Mount options of /dev [ PARTIALLY HARDENED ]
 - Mount options of /dev/shm [ PARTIALLY HARDENED ]
 - Mount options of /run [ HARDENED ]
-- Total without nodev:7 noexec:7 nosuid:4 ro or noexec (W^X): 7 of total 23
+- Total without nodev:5 noexec:7 nosuid:3 ro or noexec (W^X): 7 of total 26
 - Disable kernel support of some filesystems
 
 [+] USB Devices
@@ -233,7 +205,7 @@ Result: found 9 shells (valid shells: 9).
 
 [+] Storage
 ------------------------------------
-- Checking firewire ohci driver (modprobe config) [ DISABLED ]
+- Checking firewire ohci driver (modprobe config) [ NOT DISABLED ]
 
 [+] NFS
 ------------------------------------
@@ -241,12 +213,10 @@ Result: found 9 shells (valid shells: 9).
 
 [+] Name services
 ------------------------------------
-- Checking search domains [ FOUND ]
-- Checking /etc/resolv.conf options [ FOUND ]
 - Searching DNS domain name [ UNKNOWN ]
 - Checking /etc/hosts
 - Duplicate entries in hosts file [ NONE ]
-- Presence of configured hostname in /etc/hosts [ NOT FOUND ]
+- Presence of configured hostname in /etc/hosts [ FOUND ]
 - Hostname mapped to localhost [ NOT FOUND ]
 - Localhost mapping to IP address [ OK ]
 
@@ -256,12 +226,12 @@ Result: found 9 shells (valid shells: 9).
 - Searching dpkg package manager [ FOUND ]
 - Querying package manager
 - Query unpurged packages [ NONE ]
-- Checking security repository in sources.list.d directory [ OK ]
+- Checking security repository in sources.list file [ OK ]
 - Checking APT package database [ OK ]
-- Checking vulnerable packages [ OK ]
+- Checking vulnerable packages [ WARNING ]
 - Checking upgradeable packages [ SKIPPED ]
 - Checking package audit tool [ INSTALLED ]
-Found: apt-check
+Found: apt-get
 - Toolkit for automatic upgrades (unattended-upgrade) [ FOUND ]
 
 [+] Networking
@@ -271,11 +241,11 @@ Configuration method [ AUTO ]
 IPv6 only [ NO ]
 - Checking configured nameservers
 - Testing nameservers
-Nameserver: 127.0.0.53 [ OK ]
-- DNSSEC supported (systemd-resolved) [ UNKNOWN ]
+Nameserver: 192.168.122.1 [ OK ]
+- Minimal of 2 responsive nameservers [ WARNING ]
 - Getting listening ports (TCP/UDP) [ DONE ]
 - Checking promiscuous interfaces [ OK ]
-- Checking status DHCP client
+- Checking status DHCP client [ RUNNING ]
 - Checking for ARP monitoring software [ NOT FOUND ]
 - Uncommon network protocols [ 0 ]
 
@@ -305,15 +275,16 @@ Nameserver: 127.0.0.53 [ OK ]
 - Checking running SSH daemon [ FOUND ]
 - Searching SSH configuration [ FOUND ]
 - OpenSSH option: AllowTcpForwarding [ OK ]
-- OpenSSH option: ClientAliveCountMax [ SUGGESTION ]
+- OpenSSH option: ClientAliveCountMax [ OK ]
 - OpenSSH option: ClientAliveInterval [ OK ]
+- OpenSSH option: Compression [ OK ]
 - OpenSSH option: FingerprintHash [ OK ]
 - OpenSSH option: GatewayPorts [ OK ]
 - OpenSSH option: IgnoreRhosts [ OK ]
 - OpenSSH option: LoginGraceTime [ OK ]
 - OpenSSH option: LogLevel [ OK ]
 - OpenSSH option: MaxAuthTries [ OK ]
-- OpenSSH option: MaxSessions [ SUGGESTION ]
+- OpenSSH option: MaxSessions [ OK ]
 - OpenSSH option: PermitRootLogin [ OK ]
 - OpenSSH option: PermitUserEnvironment [ OK ]
 - OpenSSH option: PermitTunnel [ OK ]
@@ -353,14 +324,14 @@ No database engines found
 - Checking Syslog-NG status [ NOT FOUND ]
 - Checking systemd journal status [ FOUND ]
 - Checking Metalog status [ NOT FOUND ]
-- Checking RSyslog status [ FOUND ]
+- Checking RSyslog status [ NOT FOUND ]
 - Checking RFC 3195 daemon status [ NOT FOUND ]
 - Checking minilogd instances [ NOT FOUND ]
 - Checking logrotate presence [ OK ]
 - Checking remote logging [ NOT ENABLED ]
 - Checking log directories (static list) [ DONE ]
 - Checking open log files [ DONE ]
-- Checking deleted files in use [ FILES FOUND ]
+- Checking deleted files in use [ DONE ]
 
 [+] Insecure services
 ------------------------------------
@@ -390,7 +361,7 @@ No database engines found
 [+] Accounting
 ------------------------------------
 - Checking accounting information [ NOT FOUND ]
-- Checking sysstat accounting data [ DISABLED ]
+- Checking sysstat accounting data [ NOT FOUND ]
 - Checking auditd [ ENABLED ]
 - Checking audit rules [ SUGGESTION ]
 - Checking audit configuration file [ OK ]
@@ -400,15 +371,11 @@ No database engines found
 ------------------------------------
 - NTP daemon found: systemd (timesyncd) [ FOUND ]
 - Checking for a running NTP daemon or client [ OK ]
-- Last time synchronization [ 14s ]
+- Last time synchronization [ 68s ]
 
 [+] Cryptography
 ------------------------------------
-- Checking for expired SSL certificates [0/150] [ NONE ]
-
-  [WARNING]: Test CRYP-7902 had a long execution: 12.139951 seconds
-
-- Found 0 encrypted and 0 unencrypted swap devices in use. [ OK ]
+- Checking for expired SSL certificates [0/143] [ NONE ]
 - Kernel entropy is sufficient [ YES ]
 - HW RNG & rngd [ NO ]
 - SW prng [ NO ]
@@ -423,13 +390,9 @@ No database engines found
 [+] Security frameworks
 ------------------------------------
 - Checking presence AppArmor [ FOUND ]
-- Checking AppArmor status [ UNKNOWN ]
-- Checking presence SELinux [ FOUND ]
-- Checking SELinux status [ ENABLED ]
-- Checking current mode and config file [ OK ]
-Current SELinux mode: permissive
-Found 0 permissive SELinux object types
-Found 10 unconfined and 0 initrc_t processes
+- Checking AppArmor status [ ENABLED ]
+Found 33 unconfined processes
+- Checking presence SELinux [ NOT FOUND ]
 - Checking presence TOMOYO Linux [ NOT FOUND ]
 - Checking presence grsecurity [ NOT FOUND ]
 - Checking for implemented MAC framework [ OK ]
@@ -437,8 +400,6 @@ Found 10 unconfined and 0 initrc_t processes
 [+] Software: file integrity
 ------------------------------------
 - Checking file integrity tools
-- dm-integrity (status) [ DISABLED ]
-- dm-verity (status) [ DISABLED ]
 - Checking presence integrity tool [ NOT FOUND ]
 
 [+] Software: System tooling
@@ -457,22 +418,23 @@ Found 10 unconfined and 0 initrc_t processes
 ------------------------------------
 - Starting file permissions check
 File: /boot/grub/grub.cfg [ OK ]
-File: /etc/crontab [ SUGGESTION ]
+File: /etc/crontab [ OK ]
 File: /etc/group [ OK ]
 File: /etc/group- [ OK ]
 File: /etc/hosts.allow [ OK ]
 File: /etc/hosts.deny [ OK ]
 File: /etc/issue [ OK ]
 File: /etc/issue.net [ OK ]
+File: /etc/motd [ OK ]
 File: /etc/passwd [ OK ]
 File: /etc/passwd- [ OK ]
-File: /etc/ssh/sshd_config [ SUGGESTION ]
+File: /etc/ssh/sshd_config [ OK ]
 Directory: /root/.ssh [ OK ]
-Directory: /etc/cron.d [ SUGGESTION ]
-Directory: /etc/cron.daily [ SUGGESTION ]
-Directory: /etc/cron.hourly [ SUGGESTION ]
-Directory: /etc/cron.weekly [ SUGGESTION ]
-Directory: /etc/cron.monthly [ SUGGESTION ]
+Directory: /etc/cron.d [ OK ]
+Directory: /etc/cron.daily [ OK ]
+Directory: /etc/cron.hourly [ OK ]
+Directory: /etc/cron.weekly [ OK ]
+Directory: /etc/cron.monthly [ OK ]
 
 [+] Home directories
 ------------------------------------
@@ -488,17 +450,17 @@ Directory: /etc/cron.monthly [ SUGGESTION ]
 - fs.protected_hardlinks (exp: 1) [ OK ]
 - fs.protected_regular (exp: 2) [ OK ]
 - fs.protected_symlinks (exp: 1) [ OK ]
-- fs.suid_dumpable (exp: 0) [ DIFFERENT ]
+- fs.suid_dumpable (exp: 0) [ OK ]
 - kernel.core_uses_pid (exp: 1) [ DIFFERENT ]
 - kernel.ctrl-alt-del (exp: 0) [ OK ]
 - kernel.dmesg_restrict (exp: 1) [ OK ]
 - kernel.kptr_restrict (exp: 2) [ DIFFERENT ]
 - kernel.modules_disabled (exp: 1) [ DIFFERENT ]
-- kernel.perf_event_paranoid (exp: 3) [ DIFFERENT ]
+- kernel.perf_event_paranoid (exp: 3) [ OK ]
 - kernel.randomize_va_space (exp: 2) [ OK ]
 - kernel.sysrq (exp: 0) [ DIFFERENT ]
 - kernel.unprivileged_bpf_disabled (exp: 1) [ DIFFERENT ]
-- kernel.yama.ptrace_scope (exp: 1 2 3) [ OK ]
+- kernel.yama.ptrace_scope (exp: 1 2 3) [ DIFFERENT ]
 - net.core.bpf_jit_harden (exp: 2) [ DIFFERENT ]
 - net.ipv4.conf.all.accept_redirects (exp: 0) [ OK ]
 - net.ipv4.conf.all.accept_source_route (exp: 0) [ OK ]
@@ -536,11 +498,17 @@ Directory: /etc/cron.monthly [ SUGGESTION ]
 
 ================================================================================
 
-  -[ Lynis 3.0.9 Results ]-
+  -[ Lynis 3.0.8 Results ]-
 
-  Great, no warnings
+  Warnings (2):
+  ----------------------------
+  ! Found one or more vulnerable packages. [PKGS-7392] 
+      https://cisofy.com/lynis/controls/PKGS-7392/
 
-  Suggestions (39):
+  ! Couldn't find 2 responsive nameservers [NETW-2705] 
+      https://cisofy.com/lynis/controls/NETW-2705/
+
+  Suggestions (36):
   ----------------------------
   * This release is more than 4 months old. Check the website or GitHub to see if there is an update available. [LYNIS] 
       https://cisofy.com/lynis/controls/LYNIS/
@@ -585,17 +553,23 @@ Directory: /etc/cron.monthly [ SUGGESTION ]
   * Disable drivers like USB storage when not used, to prevent unauthorized storage or data theft [USB-1000] 
       https://cisofy.com/lynis/controls/USB-1000/
 
+  * Disable drivers like firewire storage when not used, to prevent unauthorized storage or data theft [STRG-1846] 
+      https://cisofy.com/lynis/controls/STRG-1846/
+
   * Check DNS configuration for the dns domain name [NAME-4028] 
       https://cisofy.com/lynis/controls/NAME-4028/
-
-  * Add the IP name and FQDN to /etc/hosts for proper name resolving [NAME-4404] 
-      https://cisofy.com/lynis/controls/NAME-4404/
 
   * Install debsums utility for the verification of packages with known good database. [PKGS-7370] 
       https://cisofy.com/lynis/controls/PKGS-7370/
 
+  * Update your system with apt-get update, apt-get upgrade, apt-get dist-upgrade and/or unattended-upgrades [PKGS-7392] 
+      https://cisofy.com/lynis/controls/PKGS-7392/
+
   * Install package apt-show-versions for patch management purposes [PKGS-7394] 
       https://cisofy.com/lynis/controls/PKGS-7394/
+
+  * Check your resolv.conf file and fill in a backup nameserver if possible [NETW-2705] 
+      https://cisofy.com/lynis/controls/NETW-2705/
 
   * Determine if protocol 'dccp' is really needed on this system [NETW-3200] 
       https://cisofy.com/lynis/controls/NETW-3200/
@@ -612,19 +586,8 @@ Directory: /etc/cron.monthly [ SUGGESTION ]
   * Check iptables rules to see which rules are currently not used [FIRE-4513] 
       https://cisofy.com/lynis/controls/FIRE-4513/
 
-  * Consider hardening SSH configuration [SSH-7408] 
-    - Details  : ClientAliveCountMax (set 3 to 2)
-      https://cisofy.com/lynis/controls/SSH-7408/
-
-  * Consider hardening SSH configuration [SSH-7408] 
-    - Details  : MaxSessions (set 10 to 2)
-      https://cisofy.com/lynis/controls/SSH-7408/
-
   * Enable logging to an external logging host for archiving purposes and additional protection [LOGG-2154] 
       https://cisofy.com/lynis/controls/LOGG-2154/
-
-  * Check what deleted files are still in use and why. [LOGG-2190] 
-      https://cisofy.com/lynis/controls/LOGG-2190/
 
   * Add a legal banner to /etc/issue, to warn unauthorized users [BANN-7126] 
       https://cisofy.com/lynis/controls/BANN-7126/
@@ -635,27 +598,17 @@ Directory: /etc/cron.monthly [ SUGGESTION ]
   * Enable process accounting [ACCT-9622] 
       https://cisofy.com/lynis/controls/ACCT-9622/
 
-  * Enable sysstat to collect accounting (disabled) [ACCT-9626] 
+  * Enable sysstat to collect accounting (no results) [ACCT-9626] 
       https://cisofy.com/lynis/controls/ACCT-9626/
 
   * Audit daemon is enabled with an empty ruleset. Disable the daemon or define rules [ACCT-9630] 
       https://cisofy.com/lynis/controls/ACCT-9630/
-
-  * Check output of aa-status [MACF-6208] 
-    - Details  : /sys/kernel/security/apparmor/profiles
-    - Solution : Run aa-status
-      https://cisofy.com/lynis/controls/MACF-6208/
 
   * Install a file integrity tool to monitor changes to critical and sensitive files [FINT-4350] 
       https://cisofy.com/lynis/controls/FINT-4350/
 
   * Determine if automation tools are present for system management [TOOL-5002] 
       https://cisofy.com/lynis/controls/TOOL-5002/
-
-  * Consider restricting file permissions [FILE-7524] 
-    - Details  : See screen output or log file
-    - Solution : Use chmod to change file permissions
-      https://cisofy.com/lynis/controls/FILE-7524/
 
   * One or more sysctl values differ from the scan profile and could be tweaked [KRNL-6000] 
     - Solution : Change sysctl value or disable test (skip-test=KRNL-6000:<sysctl-key>)
@@ -679,8 +632,8 @@ Directory: /etc/cron.monthly [ SUGGESTION ]
 
   Lynis security scan details:
 
-  Hardening index : 74 [##############      ]
-  Tests performed : 260
+  Hardening index : 75 [###############     ]
+  Tests performed : 253
   Plugins enabled : 1
 
   Components:
@@ -701,7 +654,7 @@ Directory: /etc/cron.monthly [ SUGGESTION ]
 
 ================================================================================
 
-  Lynis 3.0.9
+  Lynis 3.0.8
 
   Auditing, system hardening, and compliance for UNIX-based systems
   (Linux, macOS, BSD, and others)

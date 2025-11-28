@@ -49,6 +49,12 @@ ChallengeResponseAuthentication no
 # Prevent brute force attacks
 MaxAuthTries {{ ssh_max_auth_tries }}
 
+# Controls how many times sshd will allow a client to miss keepalive responses before disconnecting
+ClientAliveCountMax {{ ssh_client_alive_count_max }}
+
+# Controls how many open channels (subsessions) a single SSH connection can create.
+MaxSessions {{ ssh_max_sessions }} 
+
 # Prevent empty password, avoids unintentional open accounts
 PermitEmptyPasswords no
 
@@ -69,3 +75,6 @@ UseDNS {{ ssh_use_dns | ternary('yes', 'no') }}
 
 # Easier Audit
 LogLevel {{ ssh_log_level }}
+
+# Compression
+Compression no

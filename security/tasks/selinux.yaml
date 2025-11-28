@@ -1,3 +1,8 @@
+- name: Install SELinux package
+  ansible.builtin.package:
+    pkg: "{{ selinux_package }}"
+    state: present
+
 - name: Run selinux-activate (Debian-family)
   ansible.builtin.command: selinux-activate
   tags:

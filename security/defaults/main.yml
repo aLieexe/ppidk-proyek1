@@ -46,6 +46,8 @@ ssh_allow_agent_forwarding: no
 ssh_x11_forwarding: no
 ssh_print_motd: no
 ssh_use_dns: no
+ssh_client_alive_count_max: 2
+ssh_max_sessions: 2
 
 # SELinux Configuration
 selinux_state: "permissive"   #  "enforcing" (block violations), "permissive" (log only), "disabled"

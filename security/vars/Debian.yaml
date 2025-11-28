@@ -3,11 +3,6 @@ package_needed:
 - unattended-upgrades
 - ufw
 - fail2ban
-- selinux-basics
-- python3-selinux
-- python3-semanage
-- selinux-policy-default
-- policycoreutils
 - auditd
 - curl
 # - apt-listbugs # not available in ubuntu, Too lazy to make a specific OS vars there fore get rekt
@@ -15,6 +10,19 @@ package_needed:
 - needrestart
 - libpam-tmpdir
 - libpam-pwquality
+
+apparmor_package:
+- apparmor
+- apparmor-utils
+- apparmor-profiles
+- apparmor-profiles-extra
+
+selinux_package:
+- selinux-basics
+- python3-selinux
+- python3-semanage
+- selinux-policy-default
+- policycoreutils
 
 systemd_hardening:
 - ssh.service
