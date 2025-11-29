@@ -3,7 +3,15 @@
     update_cache: yes
     cache_valid_time: 3600
 
+- name: Full upgrade
+  ansible.builtin.apt:
+    upgrade: full
+
 - name: Install all the packages neeeded using apt
   ansible.builtin.apt:
     pkg: "{{ package_needed }}"
     state: present
+
+- name: Upgrade all packages (safe upgrade)
+  ansible.builtin.apt:
+    upgrade: yes

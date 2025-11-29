@@ -11,6 +11,8 @@
     owner: root
     group: root
     mode: "0600"
+  tags:
+  - molecule-notest
 
 - name: Fix permissions for /etc/ssh/sshd_config
   ansible.builtin.file:

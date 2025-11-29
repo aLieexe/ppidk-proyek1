@@ -38,7 +38,6 @@
 - name: Setup and Enable AppArmor
   include_tasks: apparmor.yaml  
 
-
 # Fix Permission
 - name: Fix file / directory permissions
   include_tasks: permission.yaml

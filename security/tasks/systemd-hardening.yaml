@@ -19,7 +19,7 @@
 
 - name: Copy <service>.service config
   ansible.builtin.copy:
-    src: "{{ item }}" 
+    src: "{{ item }}"
     dest: /etc/systemd/system/{{ item }}.d/override.conf
     owner: root
     group: root
