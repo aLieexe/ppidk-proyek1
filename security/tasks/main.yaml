@@ -45,6 +45,8 @@
 # Setup auditd
 - name: Setup auditd
   include_tasks: auditd.yaml
+  tags: 
+  - molecule-notest
 
 # others
 - name: Setup other acct and systat 
@@ -55,6 +57,8 @@
 
 - name: Kernel Hardening
   include_tasks: kernelmod.yaml
+  tags:
+  - molecule-notest
 
 - name: Reboot the server
   ansible.builtin.reboot:

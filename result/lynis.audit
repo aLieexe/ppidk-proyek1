@@ -1,5 +1,5 @@
 
-[ Lynis 3.0.8 ]
+[ Lynis 3.0.9 ]
 
 ################################################################################
   Lynis comes with ABSOLUTELY NO WARRANTY. This is free software, and you are
@@ -17,13 +17,13 @@
 - Checking profiles... [ DONE ]
 
   ---------------------------------------------------
-  Program version:           3.0.8
+  Program version:           3.0.9
   Operating system:          Linux
-  Operating system name:     Debian
-  Operating system version:  12
-  Kernel version:            6.1.0
+  Operating system name:     Ubuntu
+  Operating system version:  24.04
+  Kernel version:            6.8.0
   Hardware platform:         x86_64
-  Hostname:                  deb-vm
+  Hostname:                  ubuntu-vm
   ---------------------------------------------------
   Profiles:                  /etc/lynis/default.prf
   Log file:                  /var/log/lynis.log
@@ -51,9 +51,6 @@ Note: plugins have more extensive tests and may take several minutes to complete
     [
 [+] Debian Tests
 ------------------------------------
-
-  [WARNING]: Test CORE-1000 had a long execution: 10.507754 seconds
-
 - Checking for system binaries that are required by Debian Tests...
 - Checking /bin...  [ FOUND ]
 - Checking /sbin...  [ FOUND ]
@@ -66,6 +63,8 @@ Note: plugins have more extensive tests and may take several minutes to complete
 - libpam-tmpdir [ Installed and Enabled ]
 - File System Checks:
 - DM-Crypt, Cryptsetup & Cryptmount:
+- Checking / on /dev/vda3 [ NOT ENCRYPTED ]
+- Checking /boot on /dev/vda2 [ NOT ENCRYPTED ]
 - Software:
 - apt-listbugs [ Not Installed ]
 - apt-listchanges [ Installed and enabled for apt ]
@@ -80,37 +79,61 @@ Note: plugins have more extensive tests and may take several minutes to complete
 - Checking presence GRUB2 [ FOUND ]
 - Checking for password protection [ NONE ]
 - Check running services (systemctl) [ DONE ]
-Result: found 16 running services
+Result: found 28 running services
 - Check enabled services at boot (systemctl) [ DONE ]
-Result: found 20 enabled services
+Result: found 56 enabled services
 - Check startup files (permissions) [ OK ]
 - Running 'systemd-analyze security'
+- ModemManager.service: [ MEDIUM ]
 - auditd.service: [ EXPOSED ]
 - clamav-daemon.service: [ UNSAFE ]
 - clamav-freshclam.service: [ UNSAFE ]
 - cron.service: [ UNSAFE ]
 - dbus.service: [ UNSAFE ]
+- dm-event.service: [ UNSAFE ]
+- dmesg.service: [ UNSAFE ]
 - emergency.service: [ UNSAFE ]
-- exim4.service: [ UNSAFE ]
 - fail2ban.service: [ UNSAFE ]
 - getty@tty1.service: [ UNSAFE ]
-- ifup@enp1s0.service: [ UNSAFE ]
+- iscsid.service: [ UNSAFE ]
+- lvm2-lvmpolld.service: [ UNSAFE ]
 - lynis.service: [ UNSAFE ]
+- multipathd.service: [ UNSAFE ]
+- networkd-dispatcher.service: [ UNSAFE ]
+- open-vm-tools.service: [ UNSAFE ]
+- packagekit.service: [ UNSAFE ]
+- plymouth-start.service: [ UNSAFE ]
+- polkit.service: [ PROTECTED ]
+- postfix@-.service: [ UNSAFE ]
 - rc-local.service: [ UNSAFE ]
 - rescue.service: [ UNSAFE ]
+- rsyslog.service: [ MEDIUM ]
+- snapd.service: [ UNSAFE ]
 - ssh.service: [ UNSAFE ]
 - systemd-ask-password-console.service: [ UNSAFE ]
+- systemd-ask-password-plymouth.service: [ UNSAFE ]
 - systemd-ask-password-wall.service: [ UNSAFE ]
+- systemd-bsod.service: [ UNSAFE ]
 - systemd-fsckd.service: [ UNSAFE ]
+- systemd-hostnamed.service: [ PROTECTED ]
 - systemd-initctl.service: [ UNSAFE ]
 - systemd-journald.service: [ PROTECTED ]
 - systemd-logind.service: [ PROTECTED ]
 - systemd-networkd.service: [ PROTECTED ]
+- systemd-resolved.service: [ PROTECTED ]
+- systemd-rfkill.service: [ UNSAFE ]
+- systemd-timedated.service: [ PROTECTED ]
 - systemd-timesyncd.service: [ PROTECTED ]
 - systemd-udevd.service: [ MEDIUM ]
+- thermald.service: [ UNSAFE ]
+- tpm-udev.service: [ UNSAFE ]
+- ubuntu-advantage.service: [ UNSAFE ]
+- udisks2.service: [ UNSAFE ]
 - unattended-upgrades.service: [ UNSAFE ]
 - usbguard-dbus.service: [ UNSAFE ]
 - usbguard.service: [ PROTECTED ]
+- uuidd.service: [ MEDIUM ]
+- vgauth.service: [ UNSAFE ]
 
 [+] Kernel
 ------------------------------------
@@ -120,7 +143,7 @@ CPU support: PAE and/or NoeXecute supported [ FOUND ]
 - Checking kernel version and release [ DONE ]
 - Checking kernel type [ DONE ]
 - Checking loaded kernel modules [ DONE ]
-Found 47 active modules
+Found 45 active modules
 - Checking Linux kernel configuration file [ FOUND ]
 - Checking default I/O kernel scheduler [ NOT FOUND ]
 - Checking for available kernel update [ OK ]
@@ -129,7 +152,7 @@ Found 47 active modules
 - configuration in /etc/profile [ DEFAULT ]
 - 'hard' configuration in /etc/security/limits.conf [ DEFAULT ]
 - 'soft' configuration in /etc/security/limits.conf [ DEFAULT ]
-- Checking setuid core dumps configuration [ DISABLED ]
+- Checking setuid core dumps configuration [ PROTECTED ]
 - Check if reboot is needed [ NO ]
 
 [+] Memory and Processes
@@ -147,7 +170,7 @@ Found 47 active modules
 - Unique group IDs [ OK ]
 - Unique group names [ OK ]
 - Password file consistency [ OK ]
-- Password hashing methods [ OK ]
+- Password hashing methods [ SUGGESTION ]
 - Checking password hashing rounds [ DISABLED ]
 - Query system users (non daemons) [ DONE ]
 - NIS+ authentication support [ NOT ENABLED ]
@@ -177,7 +200,7 @@ Found 47 active modules
 [+] Shells
 ------------------------------------
 - Checking shells from /etc/shells
-Result: found 8 shells (valid shells: 8).
+Result: found 9 shells (valid shells: 9).
 - Session timeout settings/tools [ NONE ]
 - Checking default umask values
 - Checking default umask in /etc/bash.bashrc [ NONE ]
@@ -189,17 +212,21 @@ Result: found 8 shells (valid shells: 8).
 - Checking /home mount point [ SUGGESTION ]
 - Checking /tmp mount point [ SUGGESTION ]
 - Checking /var mount point [ SUGGESTION ]
+- Checking LVM volume groups [ FOUND ]
+- Checking LVM volumes [ FOUND ]
 - Query swap partitions (fstab) [ OK ]
 - Testing swap partitions [ OK ]
+- Testing /proc mount (hidepid) [ SUGGESTION ]
 - Checking for old files in /tmp [ OK ]
 - Checking /tmp sticky bit [ OK ]
 - Checking /var/tmp sticky bit [ OK ]
 - ACL support root file system [ ENABLED ]
-- Mount options of / [ NON DEFAULT ]
+- Mount options of / [ OK ]
+- Mount options of /boot [ DEFAULT ]
 - Mount options of /dev [ PARTIALLY HARDENED ]
 - Mount options of /dev/shm [ PARTIALLY HARDENED ]
 - Mount options of /run [ HARDENED ]
-- Total without nodev:5 noexec:5 nosuid:3 ro or noexec (W^X): 5 of total 23
+- Total without nodev:5 noexec:6 nosuid:3 ro or noexec (W^X): 6 of total 20
 - Disable kernel support of some filesystems
 
 [+] USB Devices
@@ -220,7 +247,7 @@ Result: found 8 shells (valid shells: 8).
 
 [+] Storage
 ------------------------------------
-- Checking firewire ohci driver (modprobe config) [ NOT DISABLED ]
+- Checking firewire ohci driver (modprobe config) [ DISABLED ]
 
 [+] NFS
 ------------------------------------
@@ -228,6 +255,8 @@ Result: found 8 shells (valid shells: 8).
 
 [+] Name services
 ------------------------------------
+- Checking search domains [ FOUND ]
+- Checking /etc/resolv.conf options [ FOUND ]
 - Searching DNS domain name [ UNKNOWN ]
 - Checking /etc/hosts
 - Duplicate entries in hosts file [ NONE ]
@@ -243,12 +272,12 @@ Result: found 8 shells (valid shells: 8).
 - Query unpurged packages [ NONE ]
 - debsums utility [ FOUND ]
 - Cron job for debsums [ FOUND ]
-- Checking security repository in sources.list file [ OK ]
+- Checking security repository in sources.list.d directory [ OK ]
 - Checking APT package database [ OK ]
-- Checking vulnerable packages (apt-get only) [ DONE ]
+- Checking vulnerable packages [ OK ]
 - Checking upgradeable packages [ NONE ]
 - Checking package audit tool [ INSTALLED ]
-Found: apt-get
+Found: apt-check
 - Toolkit for automatic upgrades (unattended-upgrade) [ FOUND ]
 
 [+] Networking
@@ -258,11 +287,11 @@ Configuration method [ AUTO ]
 IPv6 only [ NO ]
 - Checking configured nameservers
 - Testing nameservers
-Nameserver: 192.168.122.1 [ OK ]
-- Minimal of 2 responsive nameservers [ WARNING ]
+Nameserver: 127.0.0.53 [ OK ]
+- DNSSEC supported (systemd-resolved) [ UNKNOWN ]
 - Getting listening ports (TCP/UDP) [ DONE ]
 - Checking promiscuous interfaces [ OK ]
-- Checking status DHCP client [ RUNNING ]
+- Checking status DHCP client
 - Checking for ARP monitoring software [ NOT FOUND ]
 - Uncommon network protocols [ 0 ]
 
@@ -273,11 +302,9 @@ Nameserver: 192.168.122.1 [ OK ]
 
 [+] Software: e-mail and messaging
 ------------------------------------
-- Exim status [ RUNNING ]
-- Type [ LOCAL ONLY ]
-
-  [WARNING]: Test MAIL-8804 had a long execution: 10.041923 seconds
-
+- Postfix status [ RUNNING ]
+- Postfix configuration [ FOUND ]
+- Postfix banner [ WARNING ]
 
 [+] Software: firewalls
 ------------------------------------
@@ -299,7 +326,6 @@ Nameserver: 192.168.122.1 [ OK ]
 - OpenSSH option: AllowTcpForwarding [ OK ]
 - OpenSSH option: ClientAliveCountMax [ OK ]
 - OpenSSH option: ClientAliveInterval [ OK ]
-- OpenSSH option: Compression [ OK ]
 - OpenSSH option: FingerprintHash [ OK ]
 - OpenSSH option: GatewayPorts [ OK ]
 - OpenSSH option: IgnoreRhosts [ OK ]
@@ -346,7 +372,7 @@ No database engines found
 - Checking Syslog-NG status [ NOT FOUND ]
 - Checking systemd journal status [ FOUND ]
 - Checking Metalog status [ NOT FOUND ]
-- Checking RSyslog status [ NOT FOUND ]
+- Checking RSyslog status [ FOUND ]
 - Checking RFC 3195 daemon status [ NOT FOUND ]
 - Checking minilogd instances [ NOT FOUND ]
 - Checking logrotate presence [ OK ]
@@ -393,11 +419,15 @@ No database engines found
 ------------------------------------
 - NTP daemon found: systemd (timesyncd) [ FOUND ]
 - Checking for a running NTP daemon or client [ OK ]
-- Last time synchronization [ 31s ]
+- Last time synchronization [ 15s ]
 
 [+] Cryptography
 ------------------------------------
-- Checking for expired SSL certificates [0/143] [ NONE ]
+- Checking for expired SSL certificates [0/151] [ NONE ]
+
+  [WARNING]: Test CRYP-7902 had a long execution: 10.843909 seconds
+
+- Found 0 encrypted and 1 unencrypted swap devices in use. [ OK ]
 - Kernel entropy is sufficient [ YES ]
 - HW RNG & rngd [ NO ]
 - SW prng [ NO ]
@@ -413,7 +443,7 @@ No database engines found
 ------------------------------------
 - Checking presence AppArmor [ FOUND ]
 - Checking AppArmor status [ ENABLED ]
-Found 29 unconfined processes
+Found 39 unconfined processes
 - Checking presence SELinux [ NOT FOUND ]
 - Checking presence TOMOYO Linux [ NOT FOUND ]
 - Checking presence grsecurity [ NOT FOUND ]
@@ -425,6 +455,8 @@ Found 29 unconfined processes
 - AIDE [ FOUND ]
 - AIDE config file [ FOUND ]
 - AIDE database [ FOUND ]
+- dm-integrity (status) [ DISABLED ]
+- dm-verity (status) [ DISABLED ]
 - AIDE config (Checksum) [ Suggestion ]
 - Checking presence integrity tool [ FOUND ]
 
@@ -456,7 +488,6 @@ File: /etc/hosts.allow [ OK ]
 File: /etc/hosts.deny [ OK ]
 File: /etc/issue [ OK ]
 File: /etc/issue.net [ OK ]
-File: /etc/motd [ OK ]
 File: /etc/passwd [ OK ]
 File: /etc/passwd- [ OK ]
 File: /etc/ssh/sshd_config [ OK ]
@@ -481,13 +512,13 @@ Directory: /etc/cron.monthly [ OK ]
 - fs.protected_hardlinks (exp: 1) [ OK ]
 - fs.protected_regular (exp: 2) [ OK ]
 - fs.protected_symlinks (exp: 1) [ OK ]
-- fs.suid_dumpable (exp: 0) [ OK ]
+- fs.suid_dumpable (exp: 0) [ DIFFERENT ]
 - kernel.core_uses_pid (exp: 1) [ OK ]
 - kernel.ctrl-alt-del (exp: 0) [ OK ]
 - kernel.dmesg_restrict (exp: 1) [ OK ]
 - kernel.kptr_restrict (exp: 2) [ OK ]
 - kernel.modules_disabled (exp: 1) [ OK ]
-- kernel.perf_event_paranoid (exp: 3) [ OK ]
+- kernel.perf_event_paranoid (exp: 3) [ DIFFERENT ]
 - kernel.randomize_va_space (exp: 2) [ OK ]
 - kernel.sysrq (exp: 0) [ OK ]
 - kernel.unprivileged_bpf_disabled (exp: 1) [ OK ]
@@ -516,7 +547,7 @@ Directory: /etc/cron.monthly [ OK ]
 
 [+] Hardening
 ------------------------------------
-- Installed compiler(s) [ FOUND ]
+- Installed compiler(s) [ NOT FOUND ]
 - Installed malware scanner [ FOUND ]
 - Non-native binary formats [ NOT FOUND ]
 
@@ -529,12 +560,12 @@ Directory: /etc/cron.monthly [ OK ]
 
 ================================================================================
 
-  -[ Lynis 3.0.8 Results ]-
+  -[ Lynis 3.0.9 Results ]-
 
   Warnings (2):
   ----------------------------
-  ! Couldn't find 2 responsive nameservers [NETW-2705] 
-      https://cisofy.com/lynis/controls/NETW-2705/
+  ! Found some information disclosure in SMTP banner (OS or software name) [MAIL-8818] 
+      https://cisofy.com/lynis/controls/MAIL-8818/
 
   ! iptables module(s) loaded, but no rules active [FIRE-4512] 
       https://cisofy.com/lynis/controls/FIRE-4512/
@@ -556,6 +587,9 @@ Directory: /etc/cron.monthly [ OK ]
 
   * If not required, consider explicit disabling of core dump in /etc/security/limits.conf file [KRNL-5820] 
       https://cisofy.com/lynis/controls/KRNL-5820/
+
+  * Check PAM configuration, add rounds if applicable and expire passwords to encrypt with new values [AUTH-9229] 
+      https://cisofy.com/lynis/controls/AUTH-9229/
 
   * Configure password hashing rounds in /etc/login.defs [AUTH-9230] 
       https://cisofy.com/lynis/controls/AUTH-9230/
@@ -581,14 +615,8 @@ Directory: /etc/cron.monthly [ OK ]
   * To decrease the impact of a full /var file system, place /var on a separate partition [FILE-6310] 
       https://cisofy.com/lynis/controls/FILE-6310/
 
-  * Disable drivers like firewire storage when not used, to prevent unauthorized storage or data theft [STRG-1846] 
-      https://cisofy.com/lynis/controls/STRG-1846/
-
   * Check DNS configuration for the dns domain name [NAME-4028] 
       https://cisofy.com/lynis/controls/NAME-4028/
-
-  * Check your resolv.conf file and fill in a backup nameserver if possible [NETW-2705] 
-      https://cisofy.com/lynis/controls/NETW-2705/
 
   * Determine if protocol 'dccp' is really needed on this system [NETW-3200] 
       https://cisofy.com/lynis/controls/NETW-3200/
@@ -601,6 +629,14 @@ Directory: /etc/cron.monthly [ OK ]
 
   * Determine if protocol 'tipc' is really needed on this system [NETW-3200] 
       https://cisofy.com/lynis/controls/NETW-3200/
+
+  * You are advised to hide the mail_name (option: smtpd_banner) from your postfix configuration. Use postconf -e or change your main.cf file (/etc/postfix/main.cf) [MAIL-8818] 
+      https://cisofy.com/lynis/controls/MAIL-8818/
+
+  * Disable the 'VRFY' command [MAIL-8820:disable_vrfy_command] 
+    - Details  : disable_vrfy_command=no
+    - Solution : run postconf -e disable_vrfy_command=yes to change the value
+      https://cisofy.com/lynis/controls/MAIL-8820/
 
   * Enable logging to an external logging host for archiving purposes and additional protection [LOGG-2154] 
       https://cisofy.com/lynis/controls/LOGG-2154/
@@ -615,9 +651,6 @@ Directory: /etc/cron.monthly [ OK ]
     - Solution : Change sysctl value or disable test (skip-test=KRNL-6000:<sysctl-key>)
       https://cisofy.com/lynis/controls/KRNL-6000/
 
-  * Harden compilers like restricting access to root user only [HRDN-7222] 
-      https://cisofy.com/lynis/controls/HRDN-7222/
-
   Follow-up:
   ----------------------------
   - Show details of a test (lynis show details TEST-ID)
@@ -629,8 +662,8 @@ Directory: /etc/cron.monthly [ OK ]
 
   Lynis security scan details:
 
-  Hardening index : 86 [#################   ]
-  Tests performed : 258
+  Hardening index : 84 [################    ]
+  Tests performed : 267
   Plugins enabled : 1
 
   Components:
@@ -651,7 +684,7 @@ Directory: /etc/cron.monthly [ OK ]
 
 ================================================================================
 
-  Lynis 3.0.8
+  Lynis 3.0.9
 
   Auditing, system hardening, and compliance for UNIX-based systems
   (Linux, macOS, BSD, and others)
