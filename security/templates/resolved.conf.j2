@@ -1,0 +1,5 @@
+[Resolve]
+DNS={{ systemd_resolved_dns | join(' ') }}
+FallbackDNS={{ systemd_resolved_fallback_dns | join(' ') }}
+DNSSEC=allow-downgrade
+DNSOverTLS=opportunistic

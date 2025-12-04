@@ -8,15 +8,21 @@ package_needed:
 - curl
 # - apt-listbugs # not available in ubuntu, Too lazy to make a specific OS vars there fore get rekt
 - apt-listchanges
+- apt-show-versions
+- debsums
 - needrestart
 - libpam-tmpdir
 - libpam-pwquality
 - clamav 
 - clamav-daemon
+- clamav-freshclam
 - aide
 - aide-common
 - acct
 - sysstat
+- kmod
+- usbguard
+- systemd-resolved
 
 # Mostly for development
 package_to_remove: 

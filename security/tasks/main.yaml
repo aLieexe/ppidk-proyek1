@@ -42,12 +42,26 @@
 - name: Fix file / directory permissions
   include_tasks: permission.yaml
 
+# Setup auditd
+- name: Setup auditd
+  include_tasks: auditd.yaml
+  tags: 
+  - molecule-notest
+
 # others
-- name: Setup Auditd
+- name: Setup other acct and systat 
   include_tasks: other.yaml
 
 - name: Setup AIDE
   include_tasks: aide.yaml
+
+- name: Kernel Hardening
+  include_tasks: kernelmod.yaml
+  tags:
+  - molecule-notest
+
+- name: Setup systemd_resolved
+  include_tasks: systemd-resolved.yaml
 
 - name: Reboot the server
   ansible.builtin.reboot:

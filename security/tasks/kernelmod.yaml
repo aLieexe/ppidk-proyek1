@@ -1,0 +1,85 @@
+- name: Blacklist kernel file system modules
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/modprobe.d/disablefs.conf
+    line: blacklist {{ item }}
+    mode: "0644"
+    owner: root
+    group: root
+    state: present
+    create: true
+  loop:
+  - "{{ kernel_fs_modules_blocklist }}"
+
+- name: Blacklist kernel network modules
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/modprobe.d/disablenet.conf
+    line: blacklist {{ item }}
+    mode: "0644"
+    owner: root
+    group: root
+    state: present
+    create: true
+  loop:
+  - "{{ kernel_net_modules_blocklist }}"
+
+- name: Blacklist misc kernel modules
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/modprobe.d/disablemod.conf
+    line: blacklist {{ item }}
+    mode: "0644"
+    owner: root
+    group: root
+    state: present
+    create: true
+  loop:
+    - "{{ kernel_misc_modules_blocklist }}"
+
+- name: Stat blacklisted kernel modules
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      /usr/sbin/modprobe -c | grep -o '^blacklist .*' | awk '{print $2}'
+  args:
+    executable: /bin/bash
+  changed_when: false
+  register: modprobe_blacklist
+
+- name: Block blacklisted kernel modules
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/modprobe.d/blacklist-blocked.conf
+    line: install {{ item }} /bin/true
+    mode: "0644"
+    owner: root
+    group: root
+    state: present
+    create: true
+  loop:
+    - "{{ modprobe_blacklist.stdout_lines | sort | unique }}"
+
+
+- name: kernel hardening sysctl values
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: yes
+  loop:
+    - { key: "dev.tty.ldisc_autoload", value: "0" }
+    - { key: "fs.protected_fifos", value: "2" }
+    - { key: "kernel.core_uses_pid", value: "1" }
+    - { key: "kernel.kptr_restrict", value: "2" }
+    - { key: "kernel.sysrq", value: "0" }
+    - { key: "kernel.unprivileged_bpf_disabled", value: "1" }
+    - { key: "kernel.yama.ptrace_scope", value: "1" }
+    - { key: "net.core.bpf_jit_harden", value: "2" }
+    - { key: "net.ipv4.conf.all.log_martians", value: "1" }
+    - { key: "net.ipv4.conf.all.rp_filter", value: "1" }
+    - { key: "net.ipv4.conf.all.send_redirects", value: "0" }
+    - { key: "net.ipv4.conf.default.accept_source_route", value: "0" }
+    - { key: "net.ipv4.conf.default.log_martians", value: "1" }

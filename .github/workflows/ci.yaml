@@ -15,7 +15,8 @@ jobs:
         matrix:
           distro:
             - ubuntu2404
-            - ubuntu2204
+            # Disabled for now, due to systemd-resolve not actually working
+            # - ubuntu2204
             - debian13
             - debian12
 

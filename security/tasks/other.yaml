@@ -20,3 +20,23 @@
   tags:
   - molecule-idempotence-notest
 
+- name: Enable & start freshclam
+  ansible.builtin.systemd:
+    name: clamav-freshclam
+    enabled: yes
+    state: started
+  tags:
+  - molecule-idempotence-notest
+
+- name: Add issue and issue.net files
+  become: true
+  ansible.builtin.template:
+    src: "issue.j2"
+    dest: "{{ item }}"
+    backup: true
+    mode: "0644"
+    owner: root
+    group: root
+  loop:
+    - /etc/issue
+    - /etc/issue.net

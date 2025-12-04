@@ -53,3 +53,28 @@ ssh_max_sessions: 2
 selinux_state: "permissive"   #  "enforcing" (block violations), "permissive" (log only), "disabled"
 selinux_policy: "default"     # "default", "targeted", "mls"
 selinux_httpd_can_network_connect: yes # allow httpd/apache to make network connections (for reverse proxy, API calls, etc.)
+
+# Kernel Config
+kernel_net_modules_blocklist: ["atm", "dccp", "sctp", "rds", "tipc"]
+kernel_fs_modules_blocklist: ["cramfs", "freevxfs", "hfs", "hfsplus", "jffs2", "squashfs", "udf"]
+kernel_misc_modules_blocklist:
+  - "bluetooth"
+  - "bnep"
+  - "btusb"
+  - "can"
+  - "cpia2"
+  - "firewire-core"
+  - "floppy"
+  - "ksmbd"
+  - "n_hdlc"
+  - "net-pf-31"
+  - "pcspkr"
+  - "soundcore"
+  - "thunderbolt"
+  # - "usb-midi"
+  # - "usb-storage"
+  - "uvcvideo"
+  - "v4l2_common"
+
+systemd_resolved_dns: ["1.1.1.1", "8.8.8.8"]
+systemd_resolved_fallback_dns: ["1.0.0.1", "8.8.4.4"]
