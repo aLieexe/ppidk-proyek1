@@ -42,8 +42,12 @@
 - name: Fix file / directory permissions
   include_tasks: permission.yaml
 
+# Setup auditd
+- name: Setup auditd
+  include_tasks: auditd.yaml
+
 # others
-- name: Setup Auditd
+- name: Setup other acct and systat 
   include_tasks: other.yaml
 
 - name: Setup AIDE

@@ -13,6 +13,7 @@ package_needed:
 - libpam-pwquality
 - clamav 
 - clamav-daemon
+- clamav-freshclam
 - aide
 - aide-common
 - acct

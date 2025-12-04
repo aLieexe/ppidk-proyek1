@@ -52,7 +52,7 @@ Note: plugins have more extensive tests and may take several minutes to complete
 [+] Debian Tests
 ------------------------------------
 
-  [WARNING]: Test CORE-1000 had a long execution: 10.457779 seconds
+  [WARNING]: Test CORE-1000 had a long execution: 10.451121 seconds
 
 - Checking for system binaries that are required by Debian Tests...
 - Checking /bin...  [ FOUND ]
@@ -80,13 +80,14 @@ Note: plugins have more extensive tests and may take several minutes to complete
 - Checking presence GRUB2 [ FOUND ]
 - Checking for password protection [ NONE ]
 - Check running services (systemctl) [ DONE ]
-Result: found 14 running services
+Result: found 15 running services
 - Check enabled services at boot (systemctl) [ DONE ]
-Result: found 17 enabled services
+Result: found 18 enabled services
 - Check startup files (permissions) [ OK ]
 - Running 'systemd-analyze security'
 - auditd.service: [ EXPOSED ]
 - clamav-daemon.service: [ UNSAFE ]
+- clamav-freshclam.service: [ UNSAFE ]
 - cron.service: [ UNSAFE ]
 - dbus.service: [ UNSAFE ]
 - emergency.service: [ UNSAFE ]
@@ -262,7 +263,7 @@ Nameserver: 192.168.122.1 [ OK ]
 - Exim status [ RUNNING ]
 - Type [ LOCAL ONLY ]
 
-  [WARNING]: Test MAIL-8804 had a long execution: 10.036057 seconds
+  [WARNING]: Test MAIL-8804 had a long execution: 10.058984 seconds
 
 
 [+] Software: firewalls
@@ -358,9 +359,9 @@ No database engines found
 [+] Banners and identification
 ------------------------------------
 - /etc/issue [ FOUND ]
-- /etc/issue contents [ WEAK ]
+- /etc/issue contents [ OK ]
 - /etc/issue.net [ FOUND ]
-- /etc/issue.net contents [ WEAK ]
+- /etc/issue.net contents [ OK ]
 
 [+] Scheduled tasks
 ------------------------------------
@@ -371,7 +372,7 @@ No database engines found
 - Checking accounting information [ OK ]
 - Checking sysstat accounting data [ ENABLED ]
 - Checking auditd [ ENABLED ]
-- Checking audit rules [ SUGGESTION ]
+- Checking audit rules [ OK ]
 - Checking audit configuration file [ OK ]
 - Checking auditd log file [ FOUND ]
 
@@ -379,7 +380,7 @@ No database engines found
 ------------------------------------
 - NTP daemon found: systemd (timesyncd) [ FOUND ]
 - Checking for a running NTP daemon or client [ OK ]
-- Last time synchronization [ 9s ]
+- Last time synchronization [ 29s ]
 
 [+] Cryptography
 ------------------------------------
@@ -399,7 +400,7 @@ No database engines found
 ------------------------------------
 - Checking presence AppArmor [ FOUND ]
 - Checking AppArmor status [ ENABLED ]
-Found 27 unconfined processes
+Found 28 unconfined processes
 - Checking presence SELinux [ NOT FOUND ]
 - Checking presence TOMOYO Linux [ NOT FOUND ]
 - Checking presence grsecurity [ NOT FOUND ]
@@ -426,7 +427,7 @@ Found 27 unconfined processes
 ------------------------------------
 - Checking ClamAV scanner [ FOUND ]
 - Checking ClamAV daemon [ FOUND ]
-- Checking freshclam [ SUGGESTION ]
+- Checking freshclam [ FOUND ]
 - Malware software components [ FOUND ]
 - Active agent [ FOUND ]
 - Rootkit scanner [ NOT FOUND ]
@@ -522,7 +523,7 @@ Directory: /etc/cron.monthly [ OK ]
   ! Couldn't find 2 responsive nameservers [NETW-2705] 
       https://cisofy.com/lynis/controls/NETW-2705/
 
-  Suggestions (33):
+  Suggestions (29):
   ----------------------------
   * This release is more than 4 months old. Check the website or GitHub to see if there is an update available. [LYNIS] 
       https://cisofy.com/lynis/controls/LYNIS/
@@ -600,23 +601,11 @@ Directory: /etc/cron.monthly [ OK ]
   * Enable logging to an external logging host for archiving purposes and additional protection [LOGG-2154] 
       https://cisofy.com/lynis/controls/LOGG-2154/
 
-  * Add a legal banner to /etc/issue, to warn unauthorized users [BANN-7126] 
-      https://cisofy.com/lynis/controls/BANN-7126/
-
-  * Add legal banner to /etc/issue.net, to warn unauthorized users [BANN-7130] 
-      https://cisofy.com/lynis/controls/BANN-7130/
-
-  * Audit daemon is enabled with an empty ruleset. Disable the daemon or define rules [ACCT-9630] 
-      https://cisofy.com/lynis/controls/ACCT-9630/
-
   * Use SHA256 or SHA512 to create checksums in AIDE [FINT-4402] 
       https://cisofy.com/lynis/controls/FINT-4402/
 
   * Determine if automation tools are present for system management [TOOL-5002] 
       https://cisofy.com/lynis/controls/TOOL-5002/
-
-  * Confirm that freshclam is properly configured and keeps updating the ClamAV database [MALW-3286] 
-      https://cisofy.com/lynis/controls/MALW-3286/
 
   * One or more sysctl values differ from the scan profile and could be tweaked [KRNL-6000] 
     - Solution : Change sysctl value or disable test (skip-test=KRNL-6000:<sysctl-key>)
@@ -636,7 +625,7 @@ Directory: /etc/cron.monthly [ OK ]
 
   Lynis security scan details:
 
-  Hardening index : 78 [###############     ]
+  Hardening index : 79 [###############     ]
   Tests performed : 258
   Plugins enabled : 1
 
