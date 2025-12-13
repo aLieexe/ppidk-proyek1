@@ -25,11 +25,18 @@
     group: root
 
 - name: Restart auditd
-  systemd:
-    name: auditd
+  ansible.builtin.systemd_service:
+    name: auditd.service
     state: restarted
+  tags:
+  - molecule-idempotence-notest
+  when: ansible_facts.os_family == "Debian"
 
-- name: Configure Debian auditd GRUB cmdline
+- name: Condrestart auditd
+  command: service auditd condrestart
+  when: ansible_facts.os_family == "RedHat"
+
+- name: configure Debian auditd GRUB cmdline
   ansible.builtin.lineinfile:
     line: GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX audit=1 audit_backlog_limit=8192"
     regexp: "^GRUB_CMDLINE_LINUX="
@@ -39,12 +46,26 @@
     mode: "0640"
     owner: root
     group: root
-  when:
-    - ansible_facts.os_family == "Debian"
+  when: ansible_facts.os_family == "Debian"
 
-- name: Update GRUB
-  become: true
+# SELinux need to be stated, doing this should make the GRUB_CMDLINE to not get overwritten
+- name: Ensure audit kernel parameters are present (RedHat)
+  ansible.builtin.command:
+    cmd: grubby --update-kernel=ALL --args="audit=1 audit_backlog_limit=8192"
+  when: ansible_facts.os_family == "RedHat"
+  tags:
+  - molecule-idempotence-notest
+
+- name: update GRUB (Debian)
   ansible.builtin.command:
     cmd: update-grub
   register: update_grub
   changed_when: update_grub.rc == 0
+  when: ansible_facts.os_family == "Debian"
+
+- name: update GRUB2 (RedHat)
+  ansible.builtin.command:
+    cmd: grub2-mkconfig -o /boot/grub2/grub.cfg
+  register: update_grub
+  changed_when: update_grub.rc == 0
+  when: ansible_facts.os_family == "RedHat"

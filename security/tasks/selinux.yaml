@@ -1,29 +1,25 @@
-- name: Install SELinux package
-  ansible.builtin.package:
-    pkg: "{{ selinux_package }}"
+- name: Install SELinux packages
+  ansible.builtin.dnf:
+    name: "{{ selinux_package }}"
     state: present
 
-- name: Run selinux-activate (Debian-family)
-  ansible.builtin.command: selinux-activate
-  tags:
-  - molecule-idempotence-notest
-
-- name: Put SELinux in {{ selinux_state }} mode
+- name: Ensure SELinux config is set
   ansible.posix.selinux:
     policy: "{{ selinux_policy }}"
     state: "{{ selinux_state }}"
   register: selinux_config
 
-# This require some reading comprehension, please refer to https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/part_ii-managing_confined_services
-- name: Ensure httpd can connect to the network.
+- name: Ensure httpd can connect to the network
   ansible.posix.seboolean:
     name: httpd_can_network_connect
-    state: "{{ selinux_httpd_can_network_connect | ternary('yes', 'no') }}"
-    persistent: yes
-  when: ansible_selinux.status == 'enabled'
+    state: "{{ selinux_httpd_can_network_connect | ternary('on', 'off') }}"
+    persistent: true
+  when:
+  - ansible_selinux is defined
+  - ansible_selinux.status == "enabled"
 
-- name: Reboot to apply SELinux configuration
+- name: Reboot if SELinux state change requires it
   ansible.builtin.reboot:
+  when: selinux_config.reboot_required
   tags:
   - molecule-notest
-  when: selinux_config.reboot_required

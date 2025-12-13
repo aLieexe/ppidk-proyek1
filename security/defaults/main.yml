@@ -50,8 +50,8 @@ ssh_client_alive_count_max: 2
 ssh_max_sessions: 2
 
 # SELinux Configuration
-selinux_state: "permissive"   #  "enforcing" (block violations), "permissive" (log only), "disabled"
-selinux_policy: "default"     # "default", "targeted", "mls"
+selinux_state: "enforcing"   #  "enforcing" (block violations), "permissive" (log only), "disabled"
+selinux_policy: "targeted"     # "default", "targeted", "mls"
 selinux_httpd_can_network_connect: yes # allow httpd/apache to make network connections (for reverse proxy, API calls, etc.)
 
 # Kernel Config
@@ -78,3 +78,7 @@ kernel_misc_modules_blocklist:
 
 systemd_resolved_dns: ["1.1.1.1", "8.8.8.8"]
 systemd_resolved_fallback_dns: ["1.0.0.1", "8.8.4.4"]
+
+# Maximum number of open files
+systemd_limit_nofile_hard: 1024
+systemd_limit_nproc_hard: 1024

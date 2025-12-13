@@ -1,0 +1,32 @@
+[commands]
+# what kind of upgrade to perform:
+# default = all available upgrades
+# security = only security upgrades
+upgrade_type = default
+
+# whether a message should be emitted when upgrades are available,
+# downloaded, or applied.
+random_sleep = 0
+
+# maximum time in seconds to wait until the system is on-line and able to
+# connect to remote repositories.
+network_online_timeout = 60
+
+# whether updates should be downloaded when they are available
+download_updates = yes
+
+# whether updates should be applied when they are available
+apply_updates = yes
+
+[emitters]
+# name to use for this system in messages that are emitted
+system_name = {{ ansible_hostname }}
+
+# how to send messages. valid options are stdio, email and motd.
+emit_via = stdio
+
+[base]
+# this section overrides dnf.conf
+
+# use this to filter dnf core messages
+debuglevel = 1

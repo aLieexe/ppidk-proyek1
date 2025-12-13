@@ -16,40 +16,60 @@
 # Automated Updates
 - name: Setup unattended-upgrades
   include_tasks: unattended-upgrades.yaml
-  when: not molecule_testing | default(false)
+  when: not molecule_testing | default(false) and ansible_facts.os_family == "Debian"
 
-# UFW
-- name: Setup UFW
+- name: Setup dnf-automatic
+  include_tasks: dnf-automatic.yaml
+  when: not molecule_testing | default(false) and ansible_facts.os_family == "RedHat"
+
+# UFW / firewalld
+- name: configure firewall (Debian-family)
   include_tasks: ufw.yaml
+  when: ansible_facts.os_family == "Debian"
+
+- name: configure firewall (RedHat-family)
+  include_tasks: firewalld.yaml
+  when: ansible_facts.os_family == "RedHat"
 
 # Fail2ban
 - name: Setup fail2ban
   include_tasks: fail2ban.yaml
 
-# # SELinux https://wiki.debian.org/SELinux/Setup, https://major.io/p/getting-started-with-selinux/, https://cycle.io/learn/selinux-basics
-# - name: Setup SELinux
-#   include_tasks: selinux.yaml
-
 # systemd hardening
 - name: systemd hardening
   include_tasks: systemd-hardening.yaml
 
+- name: Setup systemd_resolved
+  include_tasks: systemd-resolved.yaml
+
+# SELinux https://wiki.debian.org/SELinux/Setup, https://major.io/p/getting-started-with-selinux/, https://cycle.io/learn/selinux-basics
+- name: Setup SELinux
+  include_tasks: selinux.yaml
+  when: not molecule_testing | default(false) and ansible_facts.os_family == "RedHat"
+  tags:
+  - molecule-notest
+
+
+
 # AppArmor
 - name: Setup and Enable AppArmor
-  include_tasks: apparmor.yaml  
+  include_tasks: apparmor.yaml
+  when: not molecule_testing | default(false) and ansible_facts.os_family == "Debian"
 
 # Fix Permission
 - name: Fix file / directory permissions
   include_tasks: permission.yaml
+  when: ansible_facts.os_family == "Debian"
+
 
 # Setup auditd
 - name: Setup auditd
   include_tasks: auditd.yaml
-  tags: 
+  tags:
   - molecule-notest
 
 # others
-- name: Setup other acct and systat 
+- name: Setup other acct and systat
   include_tasks: other.yaml
 
 - name: Setup AIDE
@@ -59,9 +79,6 @@
   include_tasks: kernelmod.yaml
   tags:
   - molecule-notest
-
-- name: Setup systemd_resolved
-  include_tasks: systemd-resolved.yaml
 
 - name: Reboot the server
   ansible.builtin.reboot:

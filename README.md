@@ -1,82 +1,138 @@
-# TODO
-Do as much green check for the audit below? 
+# Server Hardening With Ansible
+A collection of Ansible roles to harden Linux servers: SSH, firewall, auto updates, fail2ban, auditd, AIDE, kernel hardening, SELinux/AppArmor, and more.
 
-Support other linux distro ??
+## TLDR / Summary
+- Supports Debian/Ubuntu and RedHat family (Rocky/Fedora) via Molecule.
+- One playbook to run hardening + optional audit; Lynis report can be saved locally.
+- SSH is moved to a custom port (default 2222) and password auth is disabled.
+- Firewalls: UFW (Debian/Ubuntu) or firewalld (RedHat).
+- Auto updates: unattended-upgrades (Debian/Ubuntu) or dnf-automatic (RedHat).
+- Fail2ban, auditd, AIDE, kernel sysctl, module blacklists, systemd overrides.
+- Local testing via Molecule (Docker) and optional Vagrant VM.
 
-# How to work on this
-There are a couple option, such as spinning up a VM. Change the inventory.ini user and IP according to the VM 
-You should also set the password in inventory.ini, you can then run 
+## Supported Distributions
+- Debian 12 / 13
+- Ubuntu 24.04
+- Rocky Linux 10
+- Fedora 43
+
+## Requirements
+- Control node: Python 3.10+, Ansible 2.15+
+- Targets: SSH access with privilege escalation (become)
+- Testing: Docker + Molecule / Vagrant + libvirt
+
+## Installation
+- Install Ansible:
+```bash
+sudo apt-get update && sudo apt-get install -y python3-pip
+pip3 install ansible
 ```
+- Optional: install Molecule and plugins:
+```bash
+pip3 install molecule molecule-plugins[docker] docker
+```
+- Optional: install Vagrant + libvirt provider (distro-specific)
+
+## Project Structure
+- Playbook: playbook.yaml
+- Inventory: inventory.ini
+- Roles:
+  - security: Main hardening tasks across SSH, firewall, updates, fail2ban, auditd, AIDE, kernel, systemd, SELinux/AppArmor
+  - audit: Run Lynis and collect report
+  - debug: Basic connectivity and facts
+- Testing: molecule/default/*
+- CI: .github/workflows/*
+
+## How To Use
+1. Configure inventory.ini with your host, user, and auth (password or SSH key).
+2. Run the playbook:
+```bash
 ansible-playbook playbook.yaml
 ```
-
-after the security roles is executed, the SSH port will be change to whatever is configured (default is 2222)
-also SSH via password will also no longer be able to be done, therefore do
+3. After SSH hardening (port change + password disabled), reconnect using the new port (default 2222):
 ```bash
-ansible-playbook playbook.yaml -e "ansible_port=2222" 
+ansible-playbook playbook.yaml -e "ansible_port=2222"
+```
+4. Optional: run only on a group or host:
+```bash
+ansible-playbook playbook.yaml -l my-host-group
 ```
 
-To provision VM can also be done using Vagrant by doing
-```bash
-vagrant up --provider=libvirt
-```
+## Configuration
+- Role defaults:
+  - security/defaults/main.yml
+  - audit/defaults/main.yml
+- Distro-specific vars:
+  - security/vars/Debian.yaml
+  - security/vars/RedHat.yaml
 
-This VM can be destroyed by running
-```bash
-vagrant destroy -f
-```
+### Common Variables To Adjust
+- ssh_new_port: default 2222
 
+## Roles Overview (High Level)
+- security:
+  - SSH hardening config, custom port, disable password
+  - Firewall: ufw or firewalld rules aligned to ssh port
+  - Auto updates: unattended-upgrades or dnf-automatic
+  - Fail2ban service and base jails
+  - SELinux/AppArmor where applicable
+  - auditd rules and service
+  - AIDE install and initialize db
+  - kernel sysctl + module blacklist
+  - systemd hardening (selected services)
+- audit:
+  - run lynis and store report to result/lynis.audit
+- debug:
+  - gather facts, connectivity checks
 
-
-Another way is by running 
+## Testing With Molecule
+- Run full test:
 ```bash
 molecule test
 ```
-
-Molecule can be installed via https://docs.ansible.com/projects/molecule/installation/#pip
-If you do add a new roles, you can add them and follow the pattern in molecule/default/converge.yml
-
-
-# Contribution
-Contribute by making a new branch then push to main
-To contribute to this project:  
-
-1. **Create a New Branch**  
-   ```bash
-   git checkout -b your-branch-name
-   ```
-
-2. **Make Your Changes**  
-   - Edit, add, or improve files as needed in your branch.
-
-3. **Commit Your Changes**  
-   ```bash
-   git add .
-   git commit -m "Describe your changes"
-   ```
-
-4. **Push Your Branch**  
-   ```bash
-   git push origin your-branch-name
-   ```
-
-5. **Create a Pull Request**  
-   - Open a pull request to merge your branch into the main branch.  
-   - Ensure your changes are reviewed and approved before merging.
-
-**Note:** Always sync your branch with the main branch to avoid conflicts before merging.
-
-# Audit
-Also need to integrate this into the test or install automatically somehow, idk. Can add more if want
-https://cisofy.com/lynis/controls/LYNIS/
-
+- Choose distro:
+```bash
+MOLECULE_DISTRO=rockylinux10 molecule test
 ```
-sudo apt install lynis
+- Molecule install docs: https://docs.ansible.com/projects/molecule/installation/#pip
+- If you add a new role, follow the pattern in molecule/default/converge.yml
+
+## Using Vagrant (Optional)
+```bash
+vagrant up --provider=libvirt
+vagrant destroy -f
+```
+- Update inventory.ini with the VM ip/user/key or update the password, then run the playbook
+
+## Audit Tools (Optional)
+- lynis:
+```bash
+sudo apt install -y lynis
 sudo lynis audit system
 ```
-or in
-https://vpsaudit.vernu.dev/
 
-```
+- Other vps audit:
+```bash
 curl -O https://raw.githubusercontent.com/vernu/vps-audit/main/vps-audit.sh && chmod +x vps-audit.sh && sudo ./vps-audit.sh
 ```
+
+## Troubleshooting
+- Cannot reconnect after ssh port change:
+  - use `-e "ansible_port=<your-port>"` or set new_ssh_port in vars
+- Molecule fails:
+  - ensure docker is running and python deps are installed
+- SElinux changes:
+  - reboots may be required after state changes
+
+## Contribution
+- Create a branch and open a pull request to main
+```bash
+git checkout -b your-branch-name
+# make changes
+git add .
+git commit -m "describe changes"
+git push origin your-branch-name
+```
+- Keep branches synced with main to avoid conflicts
+- Include molecule tests for new roles or changes
+- Use `molecule-idempotence-notest` and `molecule-notest` when needed

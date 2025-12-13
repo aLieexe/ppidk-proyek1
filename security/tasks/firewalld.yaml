@@ -1,0 +1,45 @@
+- name: ensure firewalld is installed
+  ansible.builtin.dnf:
+    name: firewalld
+    state: present
+
+- name: start and enable firewalld
+  ansible.builtin.systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: configure firewall ports
+  ansible.posix.firewalld:
+    port: "{{ item.port }}/{{ item.proto }}"
+    permanent: yes
+    state: "{{ 'enabled' if item.rule == 'allow' else 'disabled' }}"
+    immediate: yes
+  loop: "{{ ufw_allowed_ports }}"
+  tags:
+  - molecule-idempotence-notest
+
+- name: set default zone to drop
+  ansible.posix.firewalld:
+    zone: drop
+    state: enabled
+    permanent: yes
+    immediate: yes
+
+- name: update ansible_port for this host
+  ansible.builtin.set_fact:
+    ansible_port: "{{ ssh_new_port }}"
+
+# Can now safely disable the port 22
+- name: Remove tcp port 22 in SELinux
+  community.general.seport:
+    ports: 22
+    proto: tcp
+    setype: ssh_port_t
+    state: absent
+    local: true
+  tags:
+  - molecule-notest
+
+- name: reconnect to host with new port
+  ansible.builtin.meta: reset_connection

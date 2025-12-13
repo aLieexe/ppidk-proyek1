@@ -19,6 +19,8 @@ jobs:
             # - ubuntu2204
             - debian13
             - debian12
+            - rockylinux10
+            - fedora43
 
       steps: 
         - uses: actions/checkout@v5

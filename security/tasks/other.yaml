@@ -3,6 +3,16 @@
     name: acct
     enabled: yes
     state: started
+  when: ansible_facts.os_family == "Debian"
+  tags:
+  - molecule-idempotence-notest
+
+- name: Enable & start acct service
+  ansible.builtin.systemd:
+    name: psacct
+    enabled: yes
+    state: started
+  when: ansible_facts.os_family == "Redhat"
   tags:
   - molecule-idempotence-notest
 
@@ -11,6 +21,8 @@
     path: /etc/default/sysstat
     regexp: 'ENABLED="false"'
     replace: 'ENABLED="true"'
+  when: ansible_facts.os_family == "Debian"
+
 
 - name: Enable & start sysstat service
   ansible.builtin.systemd:
@@ -38,5 +50,5 @@
     owner: root
     group: root
   loop:
-    - /etc/issue
-    - /etc/issue.net
+  - /etc/issue
+  - /etc/issue.net

@@ -13,7 +13,7 @@ package_needed:
 - needrestart
 - libpam-tmpdir
 - libpam-pwquality
-- clamav 
+- clamav
 - clamav-daemon
 - clamav-freshclam
 - aide
@@ -25,12 +25,11 @@ package_needed:
 - systemd-resolved
 
 # Mostly for development
-package_to_remove: 
+package_to_remove:
 - gcc
 - g++
 - build-essential
 - binfmt-support
-
 
 apparmor_package:
 - apparmor
@@ -48,3 +47,5 @@ selinux_package:
 systemd_hardening:
 - ssh.service
 - fail2ban.service
+
+ssh_service: ssh.service

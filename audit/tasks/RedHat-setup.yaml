@@ -1,0 +1,29 @@
+- name: Ensure gnupg2 is installed
+  ansible.builtin.dnf:
+    name: gnupg2
+    state: present
+
+- name: Import CISOfy GPG key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://packages.cisofy.com/keys/cisofy-software-rpms-public.key
+
+- name: Add CISOfy Lynis repository
+  ansible.builtin.copy:
+    dest: /etc/yum.repos.d/cisofy-lynis.repo
+    content: |
+      [lynis]
+      name=CISOfy Software - Lynis package
+      baseurl=https://packages.cisofy.com/community/lynis/rpm/
+      enabled=1
+      gpgkey=https://packages.cisofy.com/keys/cisofy-software-rpms-public.key
+      gpgcheck=1
+
+- name: Update dnf cache
+  ansible.builtin.dnf:
+    update_cache: yes
+
+- name: Install audit packages neeeded using dnf
+  ansible.builtin.dnf:
+    pkg: "{{ package_needed }}"
+    state: present

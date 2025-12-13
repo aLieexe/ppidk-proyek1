@@ -7,16 +7,11 @@
     mode: "0644"
     owner: root
     group: root
-
-- name: Reload systemd
-  ansible.builtin.systemd_service:
-    daemon_reload: true
-  tags: 
-  - molecule-idempotence-notest
+  notify: Reload systemd
 
 - name: Restart resolved service
   ansible.builtin.service:
     name: systemd-resolved
     state: restarted
-  tags: 
+  tags:
   - molecule-idempotence-notest

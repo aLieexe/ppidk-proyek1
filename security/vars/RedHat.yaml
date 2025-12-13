@@ -1,0 +1,47 @@
+package_needed:
+- openssh-server
+- dnf-automatic
+- firewalld
+- fail2ban
+- audit
+- audispd-plugins
+- curl
+- dnf-plugin-versionlock
+- rpmconf
+- dnf-utils
+- libpwquality
+- clamav
+- clamd
+- clamav-update
+- aide
+- psacct
+- sysstat
+- kmod
+- usbguard
+- systemd-resolved
+- libselinux-python3
+- python3-libselinux
+- python3-policycoreutils
+- libselinux-utils
+
+package_to_remove:
+- gcc
+- gcc-c++
+- make
+- glibc-devel
+- kernel-devel
+- qemu-user-static
+
+# RHEL does not support AppArmor
+apparmor_package: []
+
+selinux_package:
+- selinux-policy
+- selinux-policy-targeted
+- policycoreutils
+- policycoreutils-python-utils
+
+systemd_hardening:
+- fail2ban.service
+
+ssh_service: sshd.service

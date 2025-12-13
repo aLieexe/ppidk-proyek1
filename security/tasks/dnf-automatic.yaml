@@ -1,0 +1,13 @@
+- name: configure dnf-automatic
+  ansible.builtin.template:
+    src: "automatic.conf.j2"
+    dest: "/etc/dnf/automatic.conf"
+    owner: root
+    group: root
+    mode: 644
+
+- name: enable and start dnf-automatic timer
+  ansible.builtin.systemd:
+    name: dnf-automatic.timer
+    enabled: yes
+    state: started

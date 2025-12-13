@@ -2,6 +2,7 @@
   command: aideinit
   args:
     creates: /var/lib/aide/aide.db.new
+  when: ansible_facts.os_family == "Debian"
   tags:
   - molecule-idempotence-notest
 
@@ -9,6 +10,7 @@
   command: mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
   args:
     removes: /var/lib/aide/aide.db.new
+  when: ansible_facts.os_family == "Debian"
   tags:
   - molecule-idempotence-notest
 
@@ -18,5 +20,33 @@
     owner: root
     group: root
     mode: '0600'
+  when: ansible_facts.os_family == "Debian"
+  tags:
+  - molecule-idempotence-notest
+
+# https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/security_guide/sec-using-aide
+- name: Initialize AIDE database (RedHat)
+  command: aide --init
+  args:
+    creates: /var/lib/aide/aide.db.new.gz
+  when: ansible_facts.os_family == "RedHat"
+  tags:
+  - molecule-idempotence-notest
+
+- name: Move new AIDE database into place
+  command: mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+  args:
+    removes: /var/lib/aide/aide.db.new.gz
+  when: ansible_facts.os_family == "RedHat"
+  tags:
+  - molecule-idempotence-notest
+
+- name: Fix AIDE DB permissions
+  file:
+    path: /var/lib/aide/aide.db.gz
+    owner: root
+    group: root
+    mode: '0600'
+  when: ansible_facts.os_family == "RedHat"
   tags:
   - molecule-idempotence-notest
