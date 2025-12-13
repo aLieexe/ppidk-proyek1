@@ -57,7 +57,7 @@ Note: plugins have more extensive tests and may take several minutes to complete
 - Checking presence GRUB2 [ FOUND ]
 - Checking for password protection [ OK ]
 - Check running services (systemctl) [ DONE ]
-Result: found 19 running services
+Result: found 18 running services
 - Check enabled services at boot (systemctl) [ DONE ]
 Result: found 25 enabled services
 - Check startup files (permissions) [ OK ]

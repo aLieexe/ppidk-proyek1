@@ -10,7 +10,8 @@
     setype: ssh_port_t
     state: present
   when: ansible_facts.os_family == "RedHat"
-
+  tags:
+  - molecule-notest
 # uh how should i do this
 
 - name: Ensure /etc/ssh exists
@@ -56,18 +57,18 @@
 - name: Ensure SSH service is running
   ansible.builtin.assert:
     that:
-    - "'{{ssh_service}}' in ansible_facts.services"
-    - ansible_facts.services['{{ssh_service}}'].state == 'running'
+      - ssh_service in ansible_facts.services
+      - ansible_facts.services[ssh_service].state == 'running'
     fail_msg: "SSH service is not running or missing. Showing details below:"
     success_msg: "SSH service is active and running."
   register: ssh_check_result
   ignore_errors: true
   tags:
-  - molecule-idempotence-notest
+    - molecule-idempotence-notest
 
 - name: Print SSH service details if check failed
   ansible.builtin.debug:
-    var: ansible_facts.services['{{ssh_service}}']
+    var: ansible_facts.services[ssh_service]
   when: ssh_check_result is failed
   tags:
-  - molecule-idempotence-notest
+    - molecule-idempotence-notest

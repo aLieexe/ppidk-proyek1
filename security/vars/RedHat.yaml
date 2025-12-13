@@ -19,6 +19,10 @@ package_needed:
 - kmod
 - usbguard
 - systemd-resolved
+- libselinux-python3
+- python3-libselinux
+- python3-policycoreutils
+- libselinux-utils
 
 package_to_remove:
 - gcc
@@ -36,7 +40,6 @@ selinux_package:
 - selinux-policy-targeted
 - policycoreutils
 - policycoreutils-python-utils
-# - libselinux-utils
 
 systemd_hardening:
 - fail2ban.service

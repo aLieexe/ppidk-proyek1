@@ -30,5 +30,16 @@
   ansible.builtin.set_fact:
     ansible_port: "{{ ssh_new_port }}"
 
+# Can now safely disable the port 22
+- name: Remove tcp port 22 in SELinux
+  community.general.seport:
+    ports: 22
+    proto: tcp
+    setype: ssh_port_t
+    state: absent
+    local: true
+  tags:
+  - molecule-notest
+
 - name: reconnect to host with new port
   ansible.builtin.meta: reset_connection
