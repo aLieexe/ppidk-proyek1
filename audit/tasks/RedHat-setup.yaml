@@ -3,7 +3,6 @@
     name: gnupg2
     state: present
 
-
 - name: Import CISOfy GPG key
   ansible.builtin.rpm_key:
     state: present
@@ -25,6 +24,6 @@
     update_cache: yes
 
 - name: Install audit packages neeeded using dnf
-  ansible.builtin.dnf :
+  ansible.builtin.dnf:
     pkg: "{{ package_needed }}"
     state: present
