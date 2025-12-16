@@ -123,6 +123,18 @@ curl -O https://raw.githubusercontent.com/vernu/vps-audit/main/vps-audit.sh && c
   - ensure docker is running and python deps are installed
 - SElinux changes:
   - reboots may be required after state changes
+- VirtualBox Error: VERR_VMX_IN_VMX_ROOT_MODE (Ubuntu/Linux)
+  If you encounter this error when running `vagrant up`, it means the KVM kernel module is conflicting with VirtualBox.
+  - Temporarily unload the KVM modules before running Vagrant:
+```bash
+# For Intel Processors
+sudo rmmod kvm_intel
+sudo rmmod kvm
+
+# For AMD Processors
+sudo rmmod kvm_amd
+sudo rmmod kvm
+```
 
 ## Contribution
 - Create a branch and open a pull request to main
