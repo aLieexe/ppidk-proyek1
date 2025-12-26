@@ -8,10 +8,3 @@ all:
           ansible_connection: docker
           ansible_user: root
           ansible_host: instance
-
-    deploy:
-      hosts:
-        deploy_user:
-          ansible_connection: docker
-          ansible_user: tsukatsuki
-          ansible_host: instance
